@@ -6,74 +6,78 @@
 <title>KhamChat Pro</title>
 <style>
 :root{
-    --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
-    --card:rgba(255,255,255,0.1); --text:#fff; --accent:#FFD700;
+    --bg1:#4C1D95; --bg2:#7C3AED; --bg3:#EDE9FE; /* Purple Gradient */
+    --card:rgba(255,255,255,0.9); --text:#1E1B4B; --accent:#FFD700; --accent2:#F59E0B; /* Golden */
 }
-[data-theme="light"]{
-    --bg1:#f0f2f5; --bg2:#e4e6eb; --bg3:#d9dde3;
-    --card:rgba(255,255,255,0.8); --text:#000; --accent:#FF8C00;
+[data-theme="dark"]{
+    --bg1:#2E1065; --bg2:#4C1D95; --bg3:#1E1B4B;
+    --card:rgba(30,27,75,0.8); --text:#F5F3FF; --accent:#FFD700; --accent2:#F59E0B;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
 html,body{height:100%;width:100%;overflow:hidden;}
 body{background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);color:var(--text);}
 
-/* LOGIN */
-.login-box{background:var(--card);backdrop-filter:blur(15px);padding:30px;border-radius:20px;width:90%;max-width:350px;margin:auto;margin-top:20vh;box-shadow:0 8px 32px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.2);}
-.login-box h1{text-align:center;color:var(--accent);margin-bottom:20px;font-size:28px;}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid rgba(128,128,128,0.3);border-radius:10px;font-size:16px;background:var(--card);color:var(--text);outline:none;}
-button{width:100%;padding:12px;background:linear-gradient(90deg, var(--accent), #FFA500);color:#000;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:10px;font-weight:bold;}
-.toggle{text-align:center;margin-top:15px;color:var(--accent);cursor:pointer;}
+.login-box{background:var(--card);backdrop-filter:blur(20px);padding:30px;border-radius:20px;width:90%;max-width:350px;margin:auto;margin-top:20vh;box-shadow:0 8px 32px rgba(76,29,149,0.3);border:1px solid rgba(255,215,0,0.3);}
+.login-box h1{text-align:center;color:var(--accent2);margin-bottom:20px;font-size:28px;font-weight:800;}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid rgba(124,58,237,0.3);border-radius:10px;font-size:16px;background:var(--card);color:var(--text);outline:none;}
+button{width:100%;padding:12px;background:linear-gradient(90deg, var(--accent), var(--accent2));color:#1E1B4B;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:10px;font-weight:bold;}
+button:hover{transform:scale(1.02);}
+.toggle{text-align:center;margin-top:15px;color:var(--accent2);cursor:pointer;font-weight:600;}
 #chatApp{display:none;height:100%;width:100%;}
 
-/* TOPBAR */
-.topbar{height:55px;background:var(--card);backdrop-filter:blur(10px);display:flex;align-items:center;padding:0 15px;border-bottom:1px solid rgba(128,128,128,0.2);position:sticky;top:0;z-index:100;}
-.topbar h1{font-size:20px;font-weight:bold;color:var(--accent);}
+.topbar{height:55px;background:var(--card);backdrop-filter:blur(15px);display:flex;align-items:center;padding:0 15px;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;}
+.topbar h1{font-size:20px;font-weight:800;background:linear-gradient(90deg, var(--accent), var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .top-icons{margin-left:auto;display:flex;gap:15px;font-size:22px;cursor:pointer;}
 
 .chat-list{overflow-y:auto;height:calc(100% - 55px);background:transparent;padding-bottom:10px;}
-.chat-item{display:flex;padding:15px;gap:12px;cursor:pointer;border-bottom:1px solid rgba(128,128,128,0.2);background:var(--card);margin:8px;border-radius:15px;}
-.avatar{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg, var(--accent), #FFA500);display:flex;align-items:center;justify-content:center;font-size:24px;color:#000;flex-shrink:0;}
+.chat-item{display:flex;padding:15px;gap:12px;cursor:pointer;border-bottom:1px solid rgba(124,58,237,0.2);background:var(--card);margin:8px;border-radius:15px;transition:0.2s;}
+.chat-item:hover{background:rgba(255,215,0,0.1);}
+.avatar{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg, var(--accent), var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;color:#1E1B4B;flex-shrink:0;font-weight:bold;}
 
-/* CHAT SCREEN */
 .chat-screen{display:none;flex-direction:column;height:100%;width:100%;}
-.chat-header{height:55px;background:var(--card);backdrop-filter:blur(10px);display:flex;align-items:center;padding:0 15px;border-bottom:1px solid rgba(128,128,128,0.2);font-size:18px;font-weight:600;color:var(--accent);flex-shrink:0;position:sticky;top:0;z-index:100;}
-.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;padding-bottom:80px;}
+.chat-header{height:55px;background:var(--card);backdrop-filter:blur(15px);display:flex;align-items:center;padding:0 15px;border-bottom:2px solid var(--accent);font-size:18px;font-weight:700;color:var(--accent2);flex-shrink:0;position:sticky;top:0;z-index:100;gap:10px;}
+.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;padding-bottom:90px;}
 .message{padding:12px 16px;border-radius:18px;max-width:75%;word-wrap:break-word;}
-.me{background:linear-gradient(135deg, var(--accent), #FFA500);color:#000;align-self:flex-end;border-bottom-right-radius:5px;}
-.other{background:var(--card);backdrop-filter:blur(10px);color:var(--text);align-self:flex-start;border-bottom-left-radius:5px;border:1px solid rgba(128,128,128,0.2);}
+.me{background:linear-gradient(135deg, var(--accent), var(--accent2));color:#1E1B4B;align-self:flex-end;border-bottom-right-radius:5px;font-weight:500;}
+.other{background:var(--card);backdrop-filter:blur(10px);color:var(--text);align-self:flex-start;border-bottom-left-radius:5px;border:1px solid rgba(124,58,237,0.3);}
 
-/* INPUT AREA */
-.input-area{display:flex;padding:10px;background:var(--card);backdrop-filter:blur(10px);gap:10px;border-top:1px solid rgba(128,128,128,0.2);position:fixed;bottom:0;left:0;width:100%;z-index:200;}
-.chat-input{flex:1;padding:12px 18px;border:none;border-radius:25px;background:var(--card);color:var(--text);font-size:16px;outline:none;border:1px solid rgba(128,128,128,0.3);}
-.send-btn{padding:12px 20px;background:linear-gradient(90deg, var(--accent), #FFA500);color:#000;border:none;border-radius:50%;cursor:pointer;font-weight:bold;font-size:20px;min-width:45px;}
+.input-area{display:flex;padding:12px;background:var(--card);backdrop-filter:blur(15px);gap:10px;border-top:2px solid var(--accent);position:fixed;bottom:0;left:0;width:100%;z-index:200;align-items:center;}
+.chat-input{flex:1;padding:14px 18px;border:none;border-radius:25px;background:var(--card);color:var(--text);font-size:16px;outline:none;border:1px solid rgba(124,58,237,0.3);min-height:45px;}
+.send-btn{padding:14px;background:linear-gradient(90deg, var(--accent), var(--accent2));color:#1E1B4B;border:none;border-radius:50%;cursor:pointer;font-weight:bold;font-size:20px;width:45px;height:45px;display:flex;align-items:center;justify-content:center;}
 
-/* SETTINGS MODAL */
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;}
-.modal-content{background:var(--card);padding:20px;border-radius:20px;width:90%;max-width:400px;}
-.setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(128,128,128,0.2);}
-select{padding:8px;border-radius:8px;background:var(--card);color:var(--text);border:1px solid rgba(128,128,128,0.3);}
+.modal-content{background:var(--card);padding:20px;border-radius:20px;width:90%;max-width:400px;border:2px solid var(--accent);}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(124,58,237,0.2);}
+select{padding:8px;border-radius:8px;background:var(--card);color:var(--text);border:1px solid rgba(124,58,237,0.3);}
+
+#loadingScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg, var(--bg1), var(--bg2));display:flex;align-items:center;justify-content:center;z-index:999;}
+.loader{border:4px solid rgba(255,215,0,0.3);border-top:4px solid var(--accent);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;}
+@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginScreen">
+<div id="loadingScreen">
+    <div class="loader"></div>
+</div>
+
+<div id="loginScreen" style="display:none;">
     <div class="login-box">
-        <h1 id="appTitle">KhamChat</h1>
+        <h1>KhamChat</h1>
+        <input id="username" type="text" placeholder="Choose Username" />
         <input id="email" type="email" placeholder="Enter Email" />
         <input id="password" type="password" placeholder="Enter Password" />
         <button id="authBtn" onclick="auth()">Login</button>
         <div class="toggle" id="toggleText" onclick="toggleForm()">Don't have account? Register</div>
-        <p id="error" style="color:red;text-align:center;margin-top:10px;"></p>
+        <p id="error" style="color:#EF4444;text-align:center;margin-top:10px;"></p>
     </div>
 </div>
 
-<!-- CHAT APP -->
 <div id="chatApp">
     <div id="homeScreen">
         <div class="topbar">
-            <h1 id="appTitle2">KhamChat</h1>
+            <h1>KhamChat</h1>
             <div class="top-icons">
                 <span onclick="openSettings()">⚙️</span>
                 <span onclick="logout()">🚪</span>
@@ -81,10 +85,10 @@ select{padding:8px;border-radius:8px;background:var(--card);color:var(--text);bo
         </div>
         <div class="chat-list" id="chatList">
             <div class="chat-item" onclick="openChat('global','Global Room')">
-                <div class="avatar">🌍</div><div><b id="globalText">Global Room</b></div>
+                <div class="avatar">🌍</div><div><b>Global Room</b></div>
             </div>
             <div class="chat-item" onclick="openChat('groq-ai','Groq AI Bot')">
-                <div class="avatar">🤖</div><div><b id="aiText">Groq AI Bot</b></div>
+                <div class="avatar">🤖</div><div><b>Groq AI Bot</b></div>
             </div>
             <div id="privateChats"></div>
         </div>
@@ -100,38 +104,25 @@ select{padding:8px;border-radius:8px;background:var(--card);color:var(--text);bo
     </div>
 </div>
 
-<!-- SETTINGS MODAL -->
 <div id="settingsModal" class="modal">
     <div class="modal-content">
-        <h2 id="settingsTitle">Settings</h2>
+        <h2>Settings</h2>
         <div class="setting-row">
-            <span id="themeText">Theme</span>
+            <span>Theme</span>
             <select id="themeSelect" onchange="changeTheme()">
-                <option value="system" id="systemText">System</option>
-                <option value="light" id="lightText">Light</option>
-                <option value="dark" id="darkText">Dark</option>
+                <option value="system">System</option>
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
             </select>
         </div>
-        <div class="setting-row">
-            <span id="langText">Language</span>
-            <select id="langSelect" onchange="changeLanguage()">
-                <option value="en">English</option>
-                <option value="ha">Hausa</option>
-            </select>
-        </div>
-        <div class="setting-row">
-            <span>Groq API Key</span>
-            <input id="groqKey" type="password" placeholder="gsk_..." style="width:60%" />
-        </div>
-        <button onclick="saveSettings()" id="saveBtn">Save</button>
-        <button onclick="closeSettings()" style="background:gray" id="closeBtn">Close</button>
+        <button onclick="closeSettings()">Close</button>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAkN35nsJgxKvtVKTH2Y-IIg_jfr2fvDbI",
@@ -150,100 +141,97 @@ let currentUser = null;
 let currentRoom = "global";
 let unsubscribe = null;
 let isLogin = true;
-let lang = localStorage.getItem("lang") || "en";
-let groqKey = localStorage.getItem("groqKey") || "";
+let userProfile = {};
 
-const translations = {
-    en: {login:"Login", register:"Register", noAccount:"Don't have account? Register", haveAccount:"Have an account? Login", email:"Enter Email", pass:"Enter Password", global:"Global Room", ai:"Groq AI Bot", settings:"Settings", theme:"Theme", lang:"Language", save:"Save", close:"Close", system:"System", light:"Light", dark:"Dark", type:"Type a message..."},
-    ha: {login:"Shiga", register:"Rajista", noAccount:"Ba ka da account? Rajista", haveAccount:"Kana da account? Shiga", email:"Saka Email", pass:"Saka Password", global:"Dakin Duniya", ai:"Groq AI Bot", settings:"Saituna", theme:"Jigo", lang:"Harshe", save:"Ajiye", close:"Rufe", system:"Na Tsarin", light:"Haske", dark:"Dare", type:"Rubuta sako..."}
-}
-
-function applyLang(){
-    const t = translations[lang];
-    document.getElementById("authBtn").innerText = isLogin? t.login : t.register;
-    document.getElementById("toggleText").innerText = isLogin? t.noAccount : t.haveAccount;
-    document.getElementById("email").placeholder = t.email;
-    document.getElementById("password").placeholder = t.pass;
-    document.getElementById("globalText").innerText = t.global;
-    document.getElementById("aiText").innerText = t.ai;
-    document.getElementById("settingsTitle").innerText = t.settings;
-    document.getElementById("themeText").innerText = t.theme;
-    document.getElementById("langText").innerText = t.lang;
-    document.getElementById("saveBtn").innerText = t.save;
-    document.getElementById("closeBtn").innerText = t.close;
-    document.getElementById("systemText").innerText = t.system;
-    document.getElementById("lightText").innerText = t.light;
-    document.getElementById("darkText").innerText = t.dark;
-    document.getElementById("messageInput").placeholder = t.type;
-}
-applyLang();
-
-window.changeLanguage = function(){ lang = document.getElementById("langSelect").value; localStorage.setItem("lang", lang); applyLang(); }
-window.changeTheme = function(){ const theme = document.getElementById("themeSelect").value; localStorage.setItem("theme", theme); applyTheme(); }
 function applyTheme(){
     const theme = localStorage.getItem("theme") || "system";
-    if(theme === "system"){ document.documentElement.removeAttribute("data-theme"); }
-    else{ document.documentElement.setAttribute("data-theme", theme); }
+    if(theme === "dark"){ document.documentElement.setAttribute("data-theme", "dark"); }
+    else{ document.documentElement.removeAttribute("data-theme"); }
     document.getElementById("themeSelect").value = theme;
-    document.getElementById("langSelect").value = lang;
-    document.getElementById("groqKey").value = groqKey;
 }
 applyTheme();
 
+window.changeTheme = function(){ const theme = document.getElementById("themeSelect").value; localStorage.setItem("theme", theme); applyTheme(); }
 window.openSettings = ()=>{document.getElementById("settingsModal").style.display="flex"}
 window.closeSettings = ()=>{document.getElementById("settingsModal").style.display="none"}
-window.saveSettings = ()=>{groqKey = document.getElementById("groqKey").value; localStorage.setItem("groqKey", groqKey); alert("Settings Saved"); closeSettings();}
 
-window.toggleForm = function(){ isLogin =!isLogin; applyLang(); }
+window.toggleForm = function(){ isLogin =!isLogin; document.getElementById("authBtn").innerText = isLogin? "Login" : "Register"; document.getElementById("toggleText").innerText = isLogin? "Don't have account? Register" : "Have an account? Login"; }
 window.auth = async function(){
+    const username = document.getElementById("username").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     document.getElementById("error").innerText = "";
     try{
         if(isLogin){ await signInWithEmailAndPassword(auth, email, password); }
-        else{ await createUserWithEmailAndPassword(auth, email, password); }
+        else{
+            if(username === ""){alert("Please enter username"); return;}
+            const userCred = await createUserWithEmailAndPassword(auth, email, password);
+            await setDoc(doc(db, "users", userCred.user.uid), { username: username, email: email });
+        }
     }catch(e){ document.getElementById("error").innerText = e.message; }
 }
-window.logout = function(){ signOut(auth); }
 
-onAuthStateChanged(auth, (user) => {
-    if(user){ currentUser = user; document.getElementById("loginScreen").style.display = "none"; document.getElementById("chatApp").style.display = "block"; loadPrivateUsers(); }
-    else{ currentUser = null; document.getElementById("loginScreen").style.display = "flex"; document.getElementById("chatApp").style.display = "none"; }
+window.logout = async function(){
+    await signOut(auth);
+    localStorage.clear();
+    location.reload();
+}
+
+onAuthStateChanged(auth, async (user) => {
+    document.getElementById("loadingScreen").style.display = "none";
+    if(user){
+        currentUser = user;
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if(userDoc.exists()) userProfile = userDoc.data();
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("chatApp").style.display = "block";
+        loadPrivateUsers();
+    } else {
+        currentUser = null;
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("chatApp").style.display = "none";
+    }
 });
 
-window.openChat = function(room, name){
-    currentRoom = room; document.getElementById("roomName").innerText = name;
-    document.getElementById("homeScreen").style.display = "none"; document.getElementById("chatScreen").style.display = "flex";
-    if(unsubscribe) unsubscribe(); loadMessages();
+window.openChat = async function(room, name){
+    if(room!== "global" && room!== "groq-ai"){
+        const uid = room.split("_").find(id => id!== currentUser.uid);
+        const userDoc = await getDoc(doc(db, "users", uid));
+        if(userDoc.exists()) name = userDoc.data().username;
+    }
+    currentRoom = room;
+    document.getElementById("roomName").innerText = name;
+    document.getElementById("homeScreen").style.display = "none";
+    document.getElementById("chatScreen").style.display = "flex";
+    if(unsubscribe) unsubscribe();
+    loadMessages();
 }
 window.goHome = function(){ document.getElementById("homeScreen").style.display = "block"; document.getElementById("chatScreen").style.display = "none"; if(unsubscribe) unsubscribe(); }
 
 window.sendMessage = async function(){
     const input = document.getElementById("messageInput");
     const text = input.value.trim(); if(!text) return;
+    const displayName = userProfile.username || currentUser.email.split("@")[0];
 
     if(currentRoom === "groq-ai"){
-        await addDoc(collection(db,"groq-ai"),{name:currentUser.email,uid:currentUser.uid,text,createdAt:serverTimestamp()});
+        await addDoc(collection(db,"groq-ai"),{name:displayName,uid:currentUser.uid,text,createdAt:serverTimestamp()});
         callGroqAPI(text);
     }else{
-        await addDoc(collection(db,"messages"),{room:currentRoom,name:currentUser.email,uid:currentUser.uid,text,createdAt:serverTimestamp()});
+        await addDoc(collection(db,"messages"),{room:currentRoom,name:displayName,uid:currentUser.uid,text,createdAt:serverTimestamp()});
     }
     input.value = "";
 };
 
 async function callGroqAPI(userMsg){
-    if(!groqKey){ alert("Please add Groq API Key in Settings"); return; }
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions",{
-        method:"POST",
-        headers:{"Authorization":`Bearer ${groqKey}`,"Content-Type":"application/json"},
-        body:JSON.stringify({
-            model:"llama3-8b-8192",
-            messages:[{role:"user",content:userMsg}]
-        })
-    });
-    const data = await res.json();
-    const aiReply = data.choices[0].message.content;
-    await addDoc(collection(db,"groq-ai"),{name:"Groq AI",uid:"ai",text:aiReply,createdAt:serverTimestamp()});
+    try{
+        const res = await fetch("/api/chat", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({ message: userMsg })
+        });
+        const data = await res.json();
+        await addDoc(collection(db,"groq-ai"),{name:"Groq AI",uid:"ai",text:data.reply,createdAt:serverTimestamp()});
+    } catch(error){ alert("AI Error: " + error.message); }
 }
 
 function loadMessages(){
@@ -255,17 +243,25 @@ function loadMessages(){
             const msg = doc.data();
             if(currentRoom!== "groq-ai" && currentRoom!== "global" && msg.room!== currentRoom) return;
             if(currentRoom === "global" && msg.room!== "global") return;
-            box.innerHTML += `<div class="message ${msg.uid===currentUser.uid?'me':'other'}">${msg.uid!==currentUser.uid? `<b style="font-size:12px;color:var(--accent);">${msg.name}</b><br>` : ''}${msg.text}</div>`;
+            box.innerHTML += `<div class="message ${msg.uid===currentUser.uid?'me':'other'}">${msg.uid!==currentUser.uid? `<b style="font-size:12px;color:var(--accent2);">${msg.name}</b><br>` : ''}${msg.text}</div>`;
         });
         box.scrollTop = box.scrollHeight;
     });
 }
 
-function loadPrivateUsers(){
+async function loadPrivateUsers(){
     const usersBox = document.getElementById("privateChats");
-    onSnapshot(collection(db,"messages"),(snapshot)=>{
-        let users = {}; snapshot.forEach(doc=>{ const data = doc.data(); if(data.uid!== currentUser.uid) users[data.uid] = data.name; });
-        usersBox.innerHTML = ""; Object.keys(users).forEach(uid=>{
+    onSnapshot(collection(db,"messages"),async (snapshot)=>{
+        let users = {};
+        for(const docSnap of snapshot.docs){
+            const data = docSnap.data();
+            if(data.uid!== currentUser.uid &&!users[data.uid]){
+                const userDoc = await getDoc(doc(db, "users", data.uid));
+                users[data.uid] = userDoc.exists()? userDoc.data().username : data.name;
+            }
+        }
+        usersBox.innerHTML = "";
+        Object.keys(users).forEach(uid=>{
             const roomId = [currentUser.uid,uid].sort().join("_");
             const div = document.createElement("div"); div.className = "chat-item";
             div.innerHTML = `<div class="avatar">${users[uid][0]}</div><div><b>${users[uid]}</b></div>`;
