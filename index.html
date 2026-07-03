@@ -2,134 +2,148 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KhamChat - Realtime Messenger & AI</title>
-    <!-- Tailwind CSS for WhatsApp Modern Style UI -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KhamChat - Global Messenger</title>
+    <!-- Tailwind CSS Engine & Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        ::-webkit-scrollbar { width: 6px; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; }
+        /* Reset heights to ensure absolute 100% full-screen fit across mobile & desktop */
+        html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #0b141a; }
+        /* Custom dynamic height fix for Safari mobile */
+        .h-screen-dynamic { height: 100vh; height: calc(var(--vh, 1vh) * 100); }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #111b21; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
     </style>
 </head>
-<body class="bg-[#0b141a] h-screen flex justify-center items-center overflow-hidden text-gray-200 selection:bg-teal-500/30">
+<body class="text-gray-200 antialiased select-none">
 
-    <!-- AUTH MODAL WRAPPER (Shows on initial load) -->
-    <div id="auth-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-[#222e35] w-full max-w-md p-8 rounded-2xl border border-gray-700 shadow-2xl text-center">
-            <div class="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-bold text-[#111b21]">K</div>
-            <h2 class="text-2xl font-bold text-white mb-2">Welcome to KhamChat</h2>
-            <p class="text-gray-400 text-sm mb-6">Connect and chat instantly with friends and Khamis AI</p>
+    <!-- AUTHENTICATION LAYER WALL -->
+    <div id="auth-screen" class="fixed inset-0 bg-[#0b141a] z-50 flex flex-col justify-center items-center p-4">
+        <div class="w-full max-w-md bg-[#222e35] p-8 rounded-2xl border border-[#2a3942] shadow-2xl text-center">
+            <div class="w-20 h-20 bg-[#00a884] rounded-full flex items-center justify-center mx-auto mb-4 text-4xl font-bold text-[#111b21] shadow-lg">K</div>
+            <h1 class="text-3xl font-bold text-white tracking-wide">KhamChat</h1>
+            <p class="text-gray-400 text-sm mt-1 mb-6">Connect Globally • Instant Live Sync</p>
             
+            <div id="auth-alert" class="hidden mb-4 p-3 rounded-lg text-xs font-medium bg-red-500/10 border border-red-500/30 text-red-400"></div>
+
             <form id="auth-form" class="space-y-4 text-left">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Google Email / Account</label>
-                    <input type="email" id="auth-email" required placeholder="name@gmail.com" class="w-full bg-[#2a3942] border border-transparent focus:border-teal-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Google Email Account</label>
+                    <input type="email" id="email" required placeholder="example@gmail.com" class="w-full bg-[#2a3942] border border-transparent focus:border-[#00a884] rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Password</label>
-                    <input type="password" id="auth-password" required placeholder="••••••••" class="w-full bg-[#2a3942] border border-transparent focus:border-teal-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Secure Password</label>
+                    <input type="password" id="password" required placeholder="••••••••" class="w-full bg-[#2a3942] border border-transparent focus:border-[#00a884] rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all">
                 </div>
-                <button type="submit" class="w-full bg-teal-500 hover:bg-teal-400 text-[#111b21] font-bold py-3.5 rounded-xl text-sm transition mt-2 shadow-lg shadow-teal-500/10">
-                    Continue to KhamChat
-                </button>
+                
+                <div class="flex space-x-3 pt-2">
+                    <button type="submit" id="btn-login" class="flex-1 bg-[#00a884] hover:bg-[#009675] text-[#111b21] font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-[0.98]">
+                        Sign In
+                    </button>
+                    <button type="button" id="btn-register" class="flex-1 bg-transparent hover:bg-gray-800 border border-gray-600 text-white font-semibold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]">
+                        Register
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- MAIN WHATSAPP CONTAINER -->
-    <div class="w-full h-full flex overflow-hidden max-w-[1600px] shadow-2xl">
+    <!-- MAIN WHATSAPP GRAPHICAL HUB -->
+    <div id="app-screen" class="hidden w-full h-screen-dynamic flex overflow-hidden">
         
-        <!-- SIDEBAR (Left panel) -->
-        <div class="w-80 md:w-[400px] bg-[#111b21] border-r border-[#222e35] flex flex-col">
-            <!-- Sidebar Header -->
-            <div class="h-16 bg-[#202c33] flex items-center justify-between px-4 py-3">
+        <!-- SIDEBAR: LIST OF ACTIVE CONTACTS AND ROOMS -->
+        <div class="w-full md:w-[420px] bg-[#111b21] border-r border-[#222e35] flex flex-col flex-shrink-0">
+            <!-- Sidebar Header / User Dashboard -->
+            <div class="h-16 bg-[#202c33] flex items-center justify-between px-4">
                 <div class="flex items-center space-x-3">
-                    <div id="user-avatar" class="w-10 h-10 bg-teal-600 rounded-full flex items-center justify-center font-bold text-[#111b21]">U</div>
+                    <div id="my-avatar" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold text-white shadow-inner uppercase">K</div>
                     <div class="overflow-hidden">
-                        <p id="user-profile-name" class="text-sm font-semibold truncate text-white">Guest User</p>
-                        <p class="text-xs text-teal-400 flex items-center"><span class="w-1.5 h-1.5 bg-teal-400 rounded-full inline-block mr-1"></span> Online</p>
+                        <p id="my-name" class="text-sm font-semibold text-white truncate">Connecting...</p>
+                        <p class="text-xs text-[#00a884] flex items-center"><span class="w-2 h-2 bg-[#00a884] rounded-full inline-block mr-1.5 animate-pulse"></span>Global Online</p>
                     </div>
                 </div>
+                <!-- Logout Panel Icon -->
+                <button id="btn-logout" class="p-2 hover:bg-[#2a3942] rounded-full transition-all text-gray-400 hover:text-red-400" title="Sign Out">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                </button>
             </div>
 
-            <!-- Search bar -->
-            <div class="p-2 bg-[#111b21]">
-                <div class="bg-[#202c33] flex items-center px-4 py-1.5 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    <input type="text" placeholder="Search or start new chat" class="bg-transparent text-sm text-white placeholder-gray-400 focus:outline-none w-full">
-                </div>
+            <!-- Custom Internal Info Banner -->
+            <div class="bg-[#182229] px-4 py-3 border-b border-[#222e35] text-xs text-gray-400 flex items-center justify-between">
+                <span>Welcome to the worldwide stream room.</span>
             </div>
 
-            <!-- Chat Threads List -->
-            <div class="flex-1 overflow-y-auto divide-y divide-[#222e35]">
-                <!-- Global Chat Channel -->
-                <div class="flex items-center px-4 py-3 bg-[#2a3942] cursor-pointer border-l-4 border-teal-500">
-                    <div class="w-12 h-12 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center font-bold text-xl mr-3 flex-shrink-0">#</div>
+            <!-- Dynamic Channels and Live Active Rooms List -->
+            <div class="flex-1 overflow-y-auto">
+                <!-- Chat Item 1: Global Main Feed -->
+                <div class="flex items-center px-4 py-3.5 bg-[#2a3942] cursor-pointer transition-all border-l-4 border-[#00a884]">
+                    <div class="w-12 h-12 bg-[#00a884]/20 text-[#00a884] rounded-full flex items-center justify-center font-bold text-xl mr-3 flex-shrink-0">🌐</div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
-                            <p class="text-sm font-semibold text-white truncate">🌐 Global Chat</p>
-                            <span class="text-xs text-teal-400">Live</span>
+                            <p class="text-sm font-semibold text-white truncate">Global Main Chatroom</p>
+                            <span class="text-[10px] text-[#00a884] font-medium bg-[#00a884]/10 px-2 py-0.5 rounded-full">ACTIVE</span>
                         </div>
-                        <p class="text-xs text-gray-400 truncate mt-0.5">Talk to everyone and ask @khamis</p>
+                        <p class="text-xs text-gray-400 truncate mt-0.5">Real users communicating live right now...</p>
                     </div>
                 </div>
 
-                <!-- Khamis AI Contact Item -->
-                <div onclick="shortcutAI()" class="flex items-center px-4 py-3 hover:bg-[#202c33] cursor-pointer transition">
-                    <div class="w-12 h-12 bg-amber-500 text-[#111b21] rounded-full flex items-center justify-center font-bold text-xl mr-3 flex-shrink-0">🤖</div>
+                <!-- Chat Item 2: Built-in Dedicated Bot Panel Shortcut -->
+                <div onclick="invokeBotShortcut()" class="flex items-center px-4 py-3.5 hover:bg-[#202c33] cursor-pointer border-b border-[#222e35]/40 transition-all">
+                    <div class="w-12 h-12 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center font-bold text-xl mr-3 flex-shrink-0 shadow-md">🤖</div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
-                            <p class="text-sm font-semibold text-white truncate">Khamis AI</p>
-                            <span class="text-[10px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded">Bot</span>
+                            <p class="text-sm font-semibold text-gray-200 truncate">Khamis AI Engine</p>
+                            <span class="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold uppercase">Assistant</span>
                         </div>
-                        <p class="text-xs text-gray-400 truncate mt-0.5">Type @khamis to chat with me</p>
+                        <p class="text-xs text-gray-400 truncate mt-0.5">Type @khamis anywhere to run prompt commands</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- MAIN CHAT APP WINDOW (Right panel) -->
-        <div class="flex-1 bg-[#0b141a] flex flex-col relative" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: overlay; background-color: #0b141a; background-opacity: 0.06;">
-            
-            <!-- Chat Window Header -->
-            <div class="h-16 bg-[#202c33] flex items-center justify-between px-6 border-b border-[#222e35] z-10">
+        <!-- MESSAGES CONTAINER WINDOW FRAME -->
+        <div class="flex-1 flex flex-col h-full bg-[#0b141a] relative">
+            <!-- Background Graphic Matrix Override to look like WhatsApp -->
+            <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-repeat: repeat;"></div>
+
+            <!-- Top Chat Header Bar -->
+            <div class="h-16 bg-[#202c33] flex items-center justify-between px-6 border-b border-[#222e35] z-10 flex-shrink-0 shadow-sm">
                 <div class="flex items-center space-x-4">
-                    <div class="w-10 h-10 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center font-bold text-lg">#</div>
+                    <div class="w-10 h-10 bg-[#00a884]/10 text-[#00a884] rounded-full flex items-center justify-center font-semibold text-lg">#</div>
                     <div>
-                        <h3 class="text-sm font-semibold text-white">🌐 Global Chat</h3>
-                        <p class="text-xs text-gray-400">Realtime Community Chatroom</p>
+                        <h2 class="text-sm font-semibold text-white tracking-wide">🌐 Global Main Chatroom</h2>
+                        <p class="text-xs text-gray-400">All registered users sync safely here</p>
                     </div>
                 </div>
-                <!-- AI Quick Trigger Button -->
-                <button onclick="shortcutAI()" class="text-xs bg-[#2a3942] hover:bg-[#374248] text-amber-400 border border-amber-500/30 font-medium px-3 py-1.5 rounded-full transition flex items-center space-x-1">
-                    <span>✨ Ask Khamis AI</span>
+                
+                <button onclick="invokeBotShortcut()" class="text-xs bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-full transition-all hover:bg-amber-400 active:scale-95 shadow-md flex items-center space-x-1">
+                    <span>⚡ Prompt AI</span>
                 </button>
             </div>
 
-            <!-- Messages Stream Area -->
-            <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col">
-                <!-- loading state indicator -->
-                <div id="loader" class="my-auto text-center">
-                    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-teal-400 mx-auto mb-2"></div>
-                    <p class="text-xs text-gray-400">Securing dynamic backend bridge...</p>
+            <!-- Messaging Scroll View Box -->
+            <div id="messages-area" class="flex-1 overflow-y-auto p-6 space-y-3.5 flex flex-col z-10">
+                <div id="loading-spinner" class="my-auto text-center">
+                    <div class="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent border-[#00a884] mx-auto mb-2"></div>
+                    <p class="text-xs text-gray-400">Connecting securely to international chat grid...</p>
                 </div>
             </div>
 
-            <!-- Message Entry Bar Container -->
-            <div class="p-3 bg-[#202c33] flex items-center border-t border-[#222e35]">
-                <form id="chat-form" class="w-full flex items-center space-x-3">
+            <!-- Bottom Interactive Inputs Bar -->
+            <div class="p-3 bg-[#202c33] border-t border-[#222e35] z-10 flex-shrink-0">
+                <form id="chat-composer" class="w-full max-w-6xl mx-auto flex items-center space-x-3">
                     <input 
                         type="text" 
-                        id="message-input" 
-                        placeholder="Type a message here... (use @khamis to talk to AI bot)" 
+                        id="msg-input" 
+                        placeholder="Type a real-time message... Use @khamis to talk with AI" 
                         autocomplete="off"
                         required
-                        class="flex-1 bg-[#2a3942] text-sm text-white placeholder-gray-400 rounded-lg px-4 py-3 focus:outline-none transition"
+                        class="flex-1 bg-[#2a3942] text-sm text-white placeholder-gray-400 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-1 focus:ring-[#00a884] transition-all"
                     >
-                    <button type="submit" class="bg-teal-500 hover:bg-teal-400 text-[#111b21] p-3 rounded-full transition flex-shrink-0 shadow-md">
+                    <button type="submit" class="bg-[#00a884] hover:bg-[#009675] text-[#111b21] p-3.5 rounded-xl transition-all shadow-md active:scale-95 flex-shrink-0">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 19l9-2-9-18-9 18 9-2zm0 0v-8" /></svg>
                     </button>
                 </form>
@@ -137,12 +151,14 @@
         </div>
     </div>
 
-    <!-- FIREBASE AND CLIENT INTERACTIVE MODULES -->
+    <!-- CORE INTEGRATION MODULE WRAPPER -->
     <script type="module">
+        // Import modular distributions from Firebase Content Delivery Networks (v10)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Verified Firebase Config payload 
+        // Your assigned explicit parameters configuration payload
         const firebaseConfig = {
             apiKey: "AIzaSyAsFeKfeYTIGzP221hwPlFBHPiYyy-TLqE",
             authDomain: "khamchat-1d5a4.firebaseapp.com",
@@ -153,161 +169,227 @@
             measurementId: "G-P7JRRZ3M2M"
         };
 
-        // Init Core Components
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // Initialize Native Instances
+        const firebaseApp = initializeApp(firebaseConfig);
+        const firebaseAuth = getAuth(firebaseApp);
+        const database = getFirestore(firebaseApp);
 
-        // Core App States
-        let clientUser = localStorage.getItem('khamchat_email') || "";
-        let clientNickname = localStorage.getItem('khamchat_username') || "";
+        // Core App Cache State Management
+        let authenticatedUser = null;
+        let activeNickname = "";
 
-        // UI Element Hooks
-        const authModal = document.getElementById('auth-modal');
+        // UI View Layout Handles
+        const authScreen = document.getElementById('auth-screen');
+        const appScreen = document.getElementById('app-screen');
         const authForm = document.getElementById('auth-form');
-        const messagesContainer = document.getElementById('chat-messages');
-        const chatForm = document.getElementById('chat-form');
-        const messageInput = document.getElementById('message-input');
-        const loader = document.getElementById('loader');
+        const authAlert = document.getElementById('auth-alert');
+        const messagesArea = document.getElementById('messages-area');
+        const chatComposer = document.getElementById('chat-composer');
+        const msgInput = document.getElementById('msg-input');
+        const spinner = document.getElementById('loading-spinner');
 
-        // Check active authentication session state
-        if (clientUser) {
-            authModal.classList.add('hidden');
-            renderUserIdentity();
-            initRealtimeSync();
-        }
+        // Dynamic viewport height scaling initialization for robust screen balance
+        const setDocHeight = () => { document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); };
+        window.addEventListener('resize', setDocHeight);
+        window.addEventListener('orientationchange', setDocHeight);
+        setDocHeight();
 
-        // Intercept Modal Auth Form Completion
-        authForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const emailInput = document.getElementById('auth-email').value.trim();
-            
-            // Derive interactive username handle from credentials
-            clientUser = emailInput;
-            clientNickname = emailInput.split('@')[0];
-            
-            localStorage.setItem('khamchat_email', clientUser);
-            localStorage.setItem('khamchat_username', clientNickname);
-            
-            authModal.classList.add('hidden');
-            renderUserIdentity();
-            initRealtimeSync();
-        });
-
-        function renderUserIdentity() {
-            document.getElementById('user-profile-name').textContent = clientNickname;
-            document.getElementById('user-avatar').textContent = clientNickname.charAt(0).toUpperCase();
-        }
-
-        // Realtime Firestore Core Sync Logic
-        function initRealtimeSync() {
-            const chatCollectionRef = collection(db, "global_messages");
-            const cursorQuery = query(chatCollectionRef, orderBy("createdAt", "asc"), limit(80));
-
-            onSnapshot(cursorQuery, (snapshot) => {
-                if (loader) loader.remove();
-                messagesContainer.innerHTML = '';
-
-                snapshot.forEach((doc) => {
-                    const messagePayload = doc.data();
-                    const isSelfMessage = messagePayload.senderId === clientUser;
-                    const isSystemAI = messagePayload.senderId === "KhamisAI";
-
-                    // Message Wrapper element
-                    const messageBubbleRow = document.createElement('div');
-                    messageBubbleRow.className = `flex flex-col w-full ${isSelfMessage ? 'items-end' : 'items-start'}`;
-
-                    let displayTime = 'Just Now';
-                    if (messagePayload.createdAt) {
-                        displayTime = messagePayload.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    }
-
-                    // Assign tailored layout themes based on context role types
-                    let bubbleColorStyle = "bg-[#202c33] text-gray-200 rounded-tl-none";
-                    if (isSelfMessage) {
-                        bubbleColorStyle = "bg-[#005c4b] text-white rounded-tr-none";
-                    } else if (isSystemAI) {
-                        bubbleColorStyle = "bg-gradient-to-r from-amber-600 to-amber-700 text-white font-medium rounded-tl-none border border-amber-500/30";
-                    }
-
-                    messageBubbleRow.innerHTML = `
-                        <div class="max-w-[75%] min-w-[80px]">
-                            <span class="text-[11px] font-semibold tracking-wide text-gray-400 px-1 block mb-0.5 ${isSelfMessage ? 'text-right' : ''}">
-                                ${isSystemAI ? '🤖 Khamis AI' : (isSelfMessage ? 'You' : messagePayload.username)}
-                            </span>
-                            <div class="px-3 py-2 rounded-xl text-sm break-words shadow-sm ${bubbleColorStyle}">
-                                <p class="leading-relaxed">${sanitizeMarkup(messagePayload.text)}</p>
-                                <span class="text-[9px] text-gray-400/80 block text-right mt-1 select-none">${displayTime}</span>
-                            </div>
-                        </div>
-                    `;
-                    messagesContainer.appendChild(messageBubbleRow);
-                });
-
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            });
-        }
-
-        // Dispatch message processing pipeline
-        chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const textContent = messageInput.value.trim();
-            if (!textContent) return;
-
-            messageInput.value = '';
-
-            try {
-                // 1. Post client text package downstream to firestore
-                await addDoc(collection(db, "global_messages"), {
-                    text: textContent,
-                    username: clientNickname,
-                    senderId: clientUser,
-                    createdAt: serverTimestamp()
-                });
-
-                // 2. Intercept query targets matching bot keyword tags
-                if (textContent.toLowerCase().includes('@khamis')) {
-                    triggerAIResponse(textContent);
-                }
-
-            } catch (err) {
-                console.error("Transmission error:", err);
+        // System Authentication Status Pipeline Watcher
+        onAuthStateChanged(firebaseAuth, (user) => {
+            if (user) {
+                authenticatedUser = user;
+                activeNickname = user.email.split('@')[0];
+                
+                // Toggle application visual interfaces
+                authScreen.classList.add('hidden');
+                appScreen.classList.remove('hidden');
+                
+                // Render Identity parameters inside sidebar layout panels
+                document.getElementById('my-name').textContent = activeNickname;
+                document.getElementById('my-avatar').textContent = activeNickname.charAt(0);
+                
+                startGlobalMessagingSync();
+            } else {
+                authenticatedUser = null;
+                appScreen.classList.add('hidden');
+                authScreen.classList.remove('hidden');
             }
         });
 
-        // Khamis AI Response Mock Engine Logic
-        async function triggerAIResponse(userText) {
-            // Processing Delay simulation
-            setTimeout(async () => {
-                let botReply = "Hello! I am Khamis AI. Let me know how I can help you inside KhamChat today! ✨";
-                const checkQuery = userText.toLowerCase();
+        // Sign In Action Interceptor
+        document.getElementById('btn-login').addEventListener('click', async (e) => {
+            e.preventDefault();
+            clearAlert();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) return displayAlert("Please supply authentication fields.");
 
-                if (checkQuery.includes('hello') || checkQuery.includes('hi')) {
-                    botReply = `Hey there ${clientNickname}! Welcome to KhamChat. I'm here tracking the channel globally.`;
-                } else if (checkQuery.includes('help')) {
-                    botReply = "Sure thing! You can chat freely here in the main stream room. Tag me anytime using `@khamis` to ask questions!";
-                } else if (checkQuery.includes('time') || checkQuery.includes('date')) {
-                    botReply = `The current system timeline checks out as: ${new Date().toLocaleString()}`;
+            try {
+                await signInWithEmailAndPassword(firebaseAuth, email, password);
+            } catch (error) {
+                displayAlert(mapFirebaseError(error.code));
+            }
+        });
+
+        // Registration Action Interceptor
+        document.getElementById('btn-register').addEventListener('click', async (e) => {
+            e.preventDefault();
+            clearAlert();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) return displayAlert("Please supply authentication fields.");
+            if (password.length < 6) return displayAlert("Password length must exceed 5 positions.");
+
+            try {
+                await createUserWithEmailAndPassword(firebaseAuth, email, password);
+            } catch (error) {
+                displayAlert(mapFirebaseError(error.code));
+            }
+        });
+
+        // Sign Out Controller Action
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(firebaseAuth).catch(err => console.error("Exit processing fault:", err));
+        });
+
+        // Active Real-Time Message Database Syncing Channel Engine
+        function startGlobalMessagingSync() {
+            const documentReferenceCollection = collection(database, "global_chat_stream");
+            const queryChronologyParameters = query(documentReferenceCollection, orderBy("createdAt", "asc"), limit(120));
+
+            onSnapshot(queryChronologyParameters, (snapshot) => {
+                if (spinner) spinner.remove();
+                messagesArea.innerHTML = '';
+
+                if(snapshot.empty) {
+                    messagesArea.innerHTML = `
+                        <div class="my-auto text-center text-gray-500 py-6">
+                            <p class="text-base font-semibold text-gray-400">Welcome to KhamChat World Stream!</p>
+                            <p class="text-xs max-w-xs mx-auto mt-1">There are no global log entries recorded yet. Type a real message to populate the global matrix frame instantly.</p>
+                        </div>
+                    `;
+                    return;
                 }
 
-                // Add simulated AI generation block down stream to firestone
-                await addDoc(collection(db, "global_messages"), {
-                    text: botReply,
-                    username: "Khamis AI",
-                    senderId: "KhamisAI",
+                snapshot.forEach((doc) => {
+                    const packetData = doc.data();
+                    const isAuthorSelf = packetData.uid === authenticatedUser.uid;
+                    const isKhamisAI = packetData.uid === "SYSTEM_KHAMIS_AI";
+
+                    // Create responsive flexing bubble shell row structure
+                    const bubbleRow = document.createElement('div');
+                    bubbleRow.className = `flex flex-col w-full ${isAuthorSelf ? 'items-end' : 'items-start'}`;
+
+                    let timestampLabel = "Live";
+                    if (packetData.createdAt) {
+                        timestampLabel = packetData.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    }
+
+                    let visualThemeStyles = "bg-[#202c33] text-gray-100 rounded-tl-none";
+                    if (isAuthorSelf) {
+                        visualThemeStyles = "bg-[#005c4b] text-white rounded-tr-none";
+                    } else if (isKhamisAI) {
+                        visualThemeStyles = "bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-tl-none font-medium border border-amber-500/20 shadow-md animate-fade-in";
+                    }
+
+                    bubbleRow.innerHTML = `
+                        <div class="max-w-[85%] md:max-w-[70%] min-w-[90px]">
+                            <span class="text-[11px] font-medium text-gray-400 px-1 block mb-0.5 ${isAuthorSelf ? 'text-right' : ''}">
+                                ${isKhamisAI ? '🤖 Khamis AI Bot' : (isAuthorSelf ? 'You' : packetData.senderName)}
+                            </span>
+                            <div class="px-3.5 py-2 rounded-xl text-[14px] break-words shadow-sm ${visualThemeStyles}">
+                                <p class="leading-normal whitespace-pre-wrap">${escapeXSS(packetData.messageBody)}</p>
+                                <span class="text-[9px] text-gray-400/90 block text-right mt-1 select-none font-normal">${timestampLabel}</span>
+                            </div>
+                        </div>
+                    `;
+                    messagesArea.appendChild(bubbleRow);
+                });
+
+                // Smooth scrolling anchor focus alignment loop trigger down
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            }, (error) => {
+                console.error("Snapshot error pipeline block:", error);
+                messagesArea.innerHTML = `<div class="m-auto p-4 bg-red-950/30 border border-red-500/20 text-red-400 rounded-xl text-xs text-center max-w-xs">Firestore Access Blocked. Confirm your database rules allow read/write access.</div>`;
+            });
+        }
+
+        // Send Message Handler
+        chatComposer.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageBodyString = msgInput.value.trim();
+            if(!messageBodyString || !authenticatedUser) return;
+
+            msgInput.value = '';
+
+            try {
+                // Post record structure to remote cluster
+                await addDoc(collection(database, "global_chat_stream"), {
+                    messageBody: messageBodyString,
+                    senderName: activeNickname,
+                    uid: authenticatedUser.uid,
                     createdAt: serverTimestamp()
                 });
-            }, 1000);
+
+                // Intercept Bot Tag
+                if (messageBodyString.toLowerCase().includes('@khamis')) {
+                    executeKhamisAIAutomatedLogic(messageBodyString);
+                }
+
+            } catch (err) {
+                console.error("Post exception fault:", err);
+            }
+        });
+
+        // Khamis AI Bot Processing Module
+        function executeKhamisAIAutomatedLogic(textCommand) {
+            setTimeout(async () => {
+                let solutionString = `Hello ${activeNickname}! I am Khamis AI. Your globally routed command was registered correctly. Let me know how I can build or assist your future plans today! 🌟`;
+                const queryText = textCommand.toLowerCase();
+
+                if (queryText.includes('hello') || queryText.includes('hi ')) {
+                    solutionString = `Greetings, ${activeNickname}! Welcome to KhamChat. Users around the world can see this response in real-time.`;
+                } else if (queryText.includes('help')) {
+                    solutionString = "KhamChat Help Desk: This is a completely open global messaging workspace. Tag me anywhere using `@khamis` to run automated smart replies instantly!";
+                } else if (queryText.includes('future')) {
+                    solutionString = "Your future looks extremely promising! Keep coding, building, and exploring network infrastructures. Every great platform starts with a single file.";
+                }
+
+                try {
+                    await addDoc(collection(database, "global_chat_stream"), {
+                        messageBody: solutionString,
+                        senderName: "Khamis AI",
+                        uid: "SYSTEM_KHAMIS_AI",
+                        createdAt: serverTimestamp()
+                    });
+                } catch (e) {
+                    console.error("AI node push failed:", e);
+                }
+            }, 1100);
         }
 
-        // Prevent layout break scripts
-        function sanitizeMarkup(str) {
-            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+        // Functional Helpers
+        function displayAlert(msg) { authAlert.textContent = msg; authAlert.classList.remove('hidden'); }
+        function clearAlert() { authAlert.textContent = ""; authAlert.classList.add('hidden'); }
+        function escapeXSS(stringText) {
+            return stringText.replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match] || match));
+        }
+        function mapFirebaseError(code) {
+            switch(code) {
+                case 'auth/invalid-credential': return 'Incorrect login password or user parameters.';
+                case 'auth/email-already-in-use': return 'This email registration identity is occupied.';
+                case 'auth/weak-password': return 'The chosen password string is too weak.';
+                case 'auth/invalid-email': return 'The email layout formatting structure is invalid.';
+                default: return `Operation failed: ${code}`;
+            }
         }
 
-        // Make bot action global scope accessible
-        window.shortcutAI = function() {
-            messageInput.value = "@khamis ";
-            messageInput.focus();
+        // Expose helper shortcuts to standard window context safely
+        window.invokeBotShortcut = function() {
+            msgInput.value = "@khamis ";
+            msgInput.focus();
         };
     </script>
 </body>
