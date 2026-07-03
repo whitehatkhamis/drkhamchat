@@ -3,85 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>KhamChat</title>
+<title>KhamChat Login</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
-html,body{height:100%;width:100%;overflow:hidden;background:#ededed;}
-.topbar{height:50px;background:#ededed;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #d9d9d9;position:fixed;top:0;width:100%;z-index:10;}
-.topbar h1{font-size:18px;font-weight:500;}
-.chat-list{overflow-y:auto;height:calc(100% - 60px);margin-top:50px;padding-bottom:60px;background:#fff;-webkit-overflow-scrolling:touch;}
-.chat-item{display:flex;padding:12px 15px;gap:12px;cursor:pointer;border-bottom:1px solid #f0f0f0;background:#fff;}
-.avatar{width:50px;height:50px;border-radius:5px;background:#07c160;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0;}
-.chat-info{flex:1;overflow:hidden;}
-.chat-name{font-size:16px;font-weight:500;margin-bottom:4px;}
-.chat-last{font-size:14px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.bottom-nav{position:fixed;bottom:0;width:100%;height:60px;background:#f7f7f7;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #d9d9d9;z-index:10;}
-.nav-item{text-align:center;color:#888;font-size:11px;cursor:pointer;}
-.nav-item.active{color:#07c160;}
-.nav-icon{font-size:26px;margin-bottom:3px;}
-
-/* CHAT SCREEN GYARA */
-.chat-screen{display:none;flex-direction:column;height:100%;width:100%;background:#ededed;position:fixed;top:0;left:0;}
-.chat-header{height:50px;background:#ededed;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d9d9d9;font-size:18px;font-weight:500;flex-shrink:0;}
-.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;padding-bottom:70px;}
-.message{padding:10px 14px;border-radius:5px;max-width:70%;word-wrap:break-word;}
+body{background:#07c160;display:flex;align-items:center;justify-content:center;height:100vh;}
+.login-box{background:#fff;padding:30px;border-radius:10px;width:90%;max-width:350px;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.login-box h1{text-align:center;color:#07c160;margin-bottom:20px;}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:5px;font-size:16px;}
+button{width:100%;padding:12px;background:#07c160;color:white;border:none;border-radius:5px;font-size:16px;cursor:pointer;margin-top:10px;}
+button:hover{background:#06a050;}
+.toggle{text-align:center;margin-top:15px;color:#07c160;cursor:pointer;}
+#chatApp{display:none;height:100vh;width:100%;}
+html,body{height:100%;overflow:hidden;}
+.topbar{height:50px;background:#ededed;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d9d9d9;}
+.chat-list{overflow-y:auto;height:calc(100% - 110px);background:#fff;}
+.chat-item{display:flex;padding:12px 15px;gap:12px;cursor:pointer;border-bottom:1px solid #f0f0f0;}
+.avatar{width:50px;height:50px;border-radius:5px;background:#07c160;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;}
+.chat-screen{display:none;flex-direction:column;height:100%;background:#ededed;}
+.chat-header{height:50px;background:#ededed;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d9d9d9;}
+.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;}
+.message{padding:10px 14px;border-radius:5px;max-width:70%;}
 .me{background:#95ec69;align-self:flex-end;}
 .other{background:#fff;align-self:flex-start;}
-.time-msg{font-size:10px;color:#888;margin-top:5px;text-align:right;}
-
-/* WANNAN SHINE GYARA NA MESSAGE BOX */
-.input-area{display:flex;padding:8px;background:#f7f7f7;gap:8px;border-top:1px solid #d9d9d9;position:fixed;bottom:0;left:0;width:100%;z-index:20;}
-input{flex:1;padding:10px 15px;border:none;outline:none;border-radius:20px;background:#fff;font-size:16px;}
-button{padding:10px 18px;background:#07c160;color:white;border:none;border-radius:50%;cursor:pointer;font-weight:bold;font-size:18px;}
+.input-area{display:flex;padding:8px;background:#f7f7f7;gap:8px;border-top:1px solid #d9d9d9;position:fixed;bottom:0;width:100%;}
+input.chat-input{flex:1;padding:10px 15px;border:none;border-radius:20px;}
 </style>
 </head>
 <body>
 
-<!-- HOME SCREEN -->
-<div id="homeScreen">
-    <div class="topbar">
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+    <div class="login-box">
         <h1>KhamChat</h1>
-        <div>🔍 +</div>
-    </div>
-    <div class="chat-list" id="chatList">
-        <div class="chat-item" onclick="openChat('global','Global Room')">
-            <div class="avatar">🌍</div>
-            <div class="chat-info">
-                <div class="chat-name">Global Room</div>
-                <div class="chat-last">Welcome to KhamChat</div>
-            </div>
-        </div>
-        <div class="chat-item" onclick="openChat('rob-ai','Rob AI')">
-            <div class="avatar">🤖</div>
-            <div class="chat-info">
-                <div class="chat-name">Rob Khamis AI</div>
-                <div class="chat-last">AI Assistant</div>
-            </div>
-        </div>
-        <div id="privateChats"></div>
-    </div>
-    <div class="bottom-nav">
-        <div class="nav-item active"><div class="nav-icon">💬</div>Chats</div>
-        <div class="nav-item"><div class="nav-icon">👥</div>Contacts</div>
-        <div class="nav-item"><div class="nav-icon">🔍</div>Discover</div>
-        <div class="nav-item"><div class="nav-icon">👤</div>Me</div>
+        <input id="email" type="email" placeholder="Saka Email" />
+        <input id="password" type="password" placeholder="Saka Password" />
+        <button id="authBtn" onclick="auth()">Login</button>
+        <div class="toggle" id="toggleText" onclick="toggleForm()">Ba ka da account? Register</div>
+        <p id="error" style="color:red;text-align:center;margin-top:10px;"></p>
     </div>
 </div>
 
-<!-- CHAT SCREEN -->
-<div id="chatScreen" class="chat-screen">
-    <div class="chat-header" onclick="goHome()">← <span id="roomName">Back</span></div>
-    <div class="messages" id="messages"></div>
+<!-- CHAT APP -->
+<div id="chatApp">
+    <div id="homeScreen">
+        <div class="topbar">
+            <h1>KhamChat</h1>
+            <button onclick="logout()" style="margin-left:auto;width:auto;padding:5px 15px;">Logout</button>
+        </div>
+        <div class="chat-list" id="chatList">
+            <div class="chat-item" onclick="openChat('global','Global Room')">
+                <div class="avatar">🌍</div><div><b>Global Room</b></div>
+            </div>
+            <div class="chat-item" onclick="openChat('rob-ai','Rob AI')">
+                <div class="avatar">🤖</div><div><b>Rob Khamis AI</b></div>
+            </div>
+            <div id="privateChats"></div>
+        </div>
+    </div>
 
-    <!-- WANNAN SHINE MESSAGE BOX DIN DA YA BACE -->
-    <div class="input-area">
-        <input id="messageInput" placeholder="Type a message" />
-        <button onclick="sendMessage()">➤</button>
+    <div id="chatScreen" class="chat-screen">
+        <div class="chat-header" onclick="goHome()">← <span id="roomName">Back</span></div>
+        <div class="messages" id="messages"></div>
+        <div class="input-area">
+            <input class="chat-input" id="messageInput" placeholder="Type a message" />
+            <button onclick="sendMessage()">➤</button>
+        </div>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -94,21 +86,52 @@ appId: "1:1085659754446:web:2d61fd965ef97044aec59f"
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-let guestId = localStorage.getItem("khamchat_uid");
-if(!guestId){
-    guestId = "user_" + Math.random().toString(36).substring(2,9);
-    localStorage.setItem("khamchat_uid", guestId);
-}
-let guestName = localStorage.getItem("khamchat_name");
-if(!guestName){
-    guestName = "User" + Math.floor(Math.random()*9999);
-    localStorage.setItem("khamchat_name", guestName);
-}
-
+let currentUser = null;
 let currentRoom = "global";
 let unsubscribe = null;
+let isLogin = true;
+
+window.toggleForm = function(){
+    isLogin =!isLogin;
+    document.getElementById("authBtn").innerText = isLogin? "Login" : "Register";
+    document.getElementById("toggleText").innerText = isLogin? "Ba ka da account? Register" : "Kana da account? Login";
+}
+
+window.auth = async function(){
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    document.getElementById("error").innerText = "";
+
+    try{
+        if(isLogin){
+            await signInWithEmailAndPassword(auth, email, password);
+        }else{
+            await createUserWithEmailAndPassword(auth, email, password);
+        }
+    }catch(e){
+        document.getElementById("error").innerText = e.message;
+    }
+}
+
+window.logout = function(){
+    signOut(auth);
+}
+
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        currentUser = user;
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("chatApp").style.display = "block";
+        loadPrivateUsers();
+    }else{
+        currentUser = null;
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("chatApp").style.display = "none";
+    }
+});
 
 window.openChat = function(room, name){
     currentRoom = room;
@@ -117,14 +140,12 @@ window.openChat = function(room, name){
     document.getElementById("chatScreen").style.display = "flex";
     if(unsubscribe) unsubscribe();
     loadMessages();
-    setTimeout(()=>{document.getElementById("messageInput").focus()}, 300)
 }
 
 window.goHome = function(){
     document.getElementById("homeScreen").style.display = "block";
     document.getElementById("chatScreen").style.display = "none";
     if(unsubscribe) unsubscribe();
-    loadPrivateUsers();
 }
 
 window.sendMessage = async function(){
@@ -133,46 +154,33 @@ window.sendMessage = async function(){
     if(!text) return;
 
     if(currentRoom === "rob-ai"){
-        await addDoc(collection(db,"rob-ai"),{name:guestName,uid:guestId,text,createdAt:serverTimestamp()});
+        await addDoc(collection(db,"rob-ai"),{name:currentUser.email,uid:currentUser.uid,text,createdAt:serverTimestamp()});
         setTimeout(async()=>{
             await addDoc(collection(db,"rob-ai"),{name:"Rob AI",uid:"ai",text:"Received: " + text,createdAt:serverTimestamp()});
         },800)
     }else{
-        await addDoc(collection(db,"messages"),{room:currentRoom,name:guestName,uid:guestId,text,createdAt:serverTimestamp()});
+        await addDoc(collection(db,"messages"),{room:currentRoom,name:currentUser.email,uid:currentUser.uid,text,createdAt:serverTimestamp()});
     }
     input.value = "";
 };
 
-document.getElementById("messageInput").addEventListener("keypress", function(e){
-    if(e.key === "Enter") sendMessage();
-});
-
 function loadMessages(){
     const box = document.getElementById("messages");
-    let q;
-    if(currentRoom === "rob-ai"){
-        q = query(collection(db,"rob-ai"),orderBy("createdAt"));
-    }else{
-        q = query(collection(db,"messages"),orderBy("createdAt"));
-    }
+    let q = query(collection(db,"messages"),orderBy("createdAt"));
+    if(currentRoom === "rob-ai") q = query(collection(db,"rob-ai"),orderBy("createdAt"));
 
     unsubscribe = onSnapshot(q,(snapshot)=>{
         box.innerHTML = "";
         snapshot.forEach(doc=>{
             const msg = doc.data();
-            if(currentRoom!== "rob-ai" && currentRoom!== "global"){
-                if(msg.room!== currentRoom) return;
-            }
+            if(currentRoom!== "rob-ai" && currentRoom!== "global" && msg.room!== currentRoom) return;
             if(currentRoom === "global" && msg.room!== "global") return;
 
-            const time = msg.createdAt?.toDate? msg.createdAt.toDate().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : "";
             box.innerHTML += `
-            <div class="message ${msg.uid===guestId?'me':'other'}">
-            ${msg.uid!==guestId? `<b style="font-size:12px;color:#576b95;">${msg.name}</b><br>` : ''}
+            <div class="message ${msg.uid===currentUser.uid?'me':'other'}">
+            ${msg.uid!==currentUser.uid? `<b style="font-size:12px;color:#576b95;">${msg.name}</b><br>` : ''}
             ${msg.text}
-            <div class="time-msg">${time}</div>
-            </div>
-            `;
+            </div>`;
         });
         box.scrollTop = box.scrollHeight;
     });
@@ -184,26 +192,19 @@ function loadPrivateUsers(){
         let users = {};
         snapshot.forEach(doc=>{
             const data = doc.data();
-            if(data.uid!== guestId) users[data.uid] = data.name;
+            if(data.uid!== currentUser.uid) users[data.uid] = data.name;
         });
         usersBox.innerHTML = "";
         Object.keys(users).forEach(uid=>{
-            const roomId = [guestId,uid].sort().join("_");
+            const roomId = [currentUser.uid,uid].sort().join("_");
             const div = document.createElement("div");
             div.className = "chat-item";
-            div.innerHTML = `
-            <div class="avatar">${users[uid][0]}</div>
-            <div class="chat-info">
-                <div class="chat-name">${users[uid]}</div>
-                <div class="chat-last">Tap to chat</div>
-            </div>`;
+            div.innerHTML = `<div class="avatar">${users[uid][0]}</div><div><b>${users[uid]}</b></div>`;
             div.onclick = ()=>openChat(roomId, users[uid]);
             usersBox.appendChild(div);
         });
     });
 }
-
-loadPrivateUsers();
 </script>
 </body>
 </html>
