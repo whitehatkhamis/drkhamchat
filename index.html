@@ -3,54 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>KhamChat - WeChat Style</title>
+<title>KhamChat</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
-body{background:#ededed;overflow:hidden;height:100vh;color:#000;}
-.topbar{height:50px;background:#ededed;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #d9d9d9;}
+html,body{height:100%;width:100%;overflow:hidden;background:#ededed;}
+.topbar{height:50px;background:#ededed;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #d9d9d9;position:fixed;top:0;width:100%;z-index:10;}
 .topbar h1{font-size:18px;font-weight:500;}
-.topbar-icons{display:flex;gap:20px;font-size:22px;}
-.chat-list{overflow-y:auto;height:calc(100vh - 110px);background:#fff;-webkit-overflow-scrolling:touch;}
+.chat-list{overflow-y:auto;height:calc(100% - 60px);margin-top:50px;padding-bottom:60px;background:#fff;-webkit-overflow-scrolling:touch;}
 .chat-item{display:flex;padding:12px 15px;gap:12px;cursor:pointer;border-bottom:1px solid #f0f0f0;background:#fff;}
-.chat-item:active{background:#e5e5e5;}
-.avatar{width:50px;height:50px;border-radius:5px;background:#07c160;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;}
+.avatar{width:50px;height:50px;border-radius:5px;background:#07c160;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0;}
 .chat-info{flex:1;overflow:hidden;}
 .chat-name{font-size:16px;font-weight:500;margin-bottom:4px;}
 .chat-last{font-size:14px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.time{font-size:12px;color:#aaa;}
-.bottom-nav{position:fixed;bottom:0;width:100%;height:60px;background:#f7f7f7;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #d9d9d9;}
+.bottom-nav{position:fixed;bottom:0;width:100%;height:60px;background:#f7f7f7;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #d9d9d9;z-index:10;}
 .nav-item{text-align:center;color:#888;font-size:11px;cursor:pointer;}
 .nav-item.active{color:#07c160;}
 .nav-icon{font-size:26px;margin-bottom:3px;}
-.chat-screen{display:none;height:100vh;flex-direction:column;background:#ededed;}
-.chat-header{height:50px;background:#ededed;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d9d9d9;font-size:18px;font-weight:500;}
-.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;}
-.message{padding:10px 14px;border-radius:5px;max-width:70%;word-wrap:break-word;position:relative;}
+
+/* CHAT SCREEN GYARA */
+.chat-screen{display:none;flex-direction:column;height:100%;width:100%;background:#ededed;position:fixed;top:0;left:0;}
+.chat-header{height:50px;background:#ededed;display:flex;align-items:center;padding:0 15px;border-bottom:1px solid #d9d9d9;font-size:18px;font-weight:500;flex-shrink:0;}
+.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;padding-bottom:70px;}
+.message{padding:10px 14px;border-radius:5px;max-width:70%;word-wrap:break-word;}
 .me{background:#95ec69;align-self:flex-end;}
 .other{background:#fff;align-self:flex-start;}
 .time-msg{font-size:10px;color:#888;margin-top:5px;text-align:right;}
-.input-area{display:flex;padding:8px;background:#f7f7f7;gap:8px;border-top:1px solid #d9d9d9;}
-input{flex:1;padding:10px;border:none;outline:none;border-radius:5px;background:#fff;}
-button{padding:10px 20px;background:#07c160;color:white;border:none;border-radius:5px;cursor:pointer;font-weight:bold;}
-.empty{text-align:center;padding:100px 20px;color:#999;}
+
+/* WANNAN SHINE GYARA NA MESSAGE BOX */
+.input-area{display:flex;padding:8px;background:#f7f7f7;gap:8px;border-top:1px solid #d9d9d9;position:fixed;bottom:0;left:0;width:100%;z-index:20;}
+input{flex:1;padding:10px 15px;border:none;outline:none;border-radius:20px;background:#fff;font-size:16px;}
+button{padding:10px 18px;background:#07c160;color:white;border:none;border-radius:50%;cursor:pointer;font-weight:bold;font-size:18px;}
 </style>
 </head>
 <body>
 
-<!-- CHATS TAB -->
+<!-- HOME SCREEN -->
 <div id="homeScreen">
     <div class="topbar">
         <h1>KhamChat</h1>
-        <div class="topbar-icons">🔍 +</div>
+        <div>🔍 +</div>
     </div>
     <div class="chat-list" id="chatList">
-        <div class="chat-item" onclick="openChat('global','Global')">
+        <div class="chat-item" onclick="openChat('global','Global Room')">
             <div class="avatar">🌍</div>
             <div class="chat-info">
                 <div class="chat-name">Global Room</div>
                 <div class="chat-last">Welcome to KhamChat</div>
             </div>
-            <div class="time">now</div>
         </div>
         <div class="chat-item" onclick="openChat('rob-ai','Rob AI')">
             <div class="avatar">🤖</div>
@@ -58,7 +57,6 @@ button{padding:10px 20px;background:#07c160;color:white;border:none;border-radiu
                 <div class="chat-name">Rob Khamis AI</div>
                 <div class="chat-last">AI Assistant</div>
             </div>
-            <div class="time">online</div>
         </div>
         <div id="privateChats"></div>
     </div>
@@ -74,9 +72,11 @@ button{padding:10px 20px;background:#07c160;color:white;border:none;border-radiu
 <div id="chatScreen" class="chat-screen">
     <div class="chat-header" onclick="goHome()">← <span id="roomName">Back</span></div>
     <div class="messages" id="messages"></div>
+
+    <!-- WANNAN SHINE MESSAGE BOX DIN DA YA BACE -->
     <div class="input-area">
-        <input id="messageInput" placeholder="Type a message" onkeypress="if(event.key==='Enter') sendMessage()" />
-        <button onclick="sendMessage()">Send</button>
+        <input id="messageInput" placeholder="Type a message" />
+        <button onclick="sendMessage()">➤</button>
     </div>
 </div>
 
@@ -96,7 +96,6 @@ appId: "1:1085659754446:web:2d61fd965ef97044aec59f"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// UID DA SUNA SU DAURE
 let guestId = localStorage.getItem("khamchat_uid");
 if(!guestId){
     guestId = "user_" + Math.random().toString(36).substring(2,9);
@@ -104,7 +103,7 @@ if(!guestId){
 }
 let guestName = localStorage.getItem("khamchat_name");
 if(!guestName){
-    guestName = "WeChatUser" + Math.floor(Math.random()*999);
+    guestName = "User" + Math.floor(Math.random()*9999);
     localStorage.setItem("khamchat_name", guestName);
 }
 
@@ -118,6 +117,7 @@ window.openChat = function(room, name){
     document.getElementById("chatScreen").style.display = "flex";
     if(unsubscribe) unsubscribe();
     loadMessages();
+    setTimeout(()=>{document.getElementById("messageInput").focus()}, 300)
 }
 
 window.goHome = function(){
@@ -142,6 +142,10 @@ window.sendMessage = async function(){
     }
     input.value = "";
 };
+
+document.getElementById("messageInput").addEventListener("keypress", function(e){
+    if(e.key === "Enter") sendMessage();
+});
 
 function loadMessages(){
     const box = document.getElementById("messages");
@@ -192,8 +196,7 @@ function loadPrivateUsers(){
             <div class="chat-info">
                 <div class="chat-name">${users[uid]}</div>
                 <div class="chat-last">Tap to chat</div>
-            </div>
-            <div class="time"></div>`;
+            </div>`;
             div.onclick = ()=>openChat(roomId, users[uid]);
             usersBox.appendChild(div);
         });
