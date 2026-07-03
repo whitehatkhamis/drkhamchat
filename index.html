@@ -4,23 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KhamChat - Global Messenger</title>
-    <!-- Tailwind CSS Engine & Fonts -->
+    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; }
-        /* Reset heights to ensure absolute 100% full-screen fit across mobile & desktop */
         html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background-color: #0b141a; }
-        /* Custom dynamic height fix for Safari mobile */
         .h-screen-dynamic { height: 100vh; height: calc(var(--vh, 1vh) * 100); }
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        
+        /* Smooth scrolling area that lets users scroll up/down without breaking the fullscreen container layout */
+        .scroller-zone {
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #111b21; }
-        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
     </style>
 </head>
 <body class="text-gray-200 antialiased select-none">
 
-    <!-- AUTHENTICATION LAYER WALL -->
+    <!-- AUTHENTICATION CONTAINER (Login / Register) -->
     <div id="auth-screen" class="fixed inset-0 bg-[#0b141a] z-50 flex flex-col justify-center items-center p-4">
         <div class="w-full max-w-md bg-[#222e35] p-8 rounded-2xl border border-[#2a3942] shadow-2xl text-center">
             <div class="w-20 h-20 bg-[#00a884] rounded-full flex items-center justify-center mx-auto mb-4 text-4xl font-bold text-[#111b21] shadow-lg">K</div>
@@ -31,16 +36,16 @@
 
             <form id="auth-form" class="space-y-4 text-left">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Google Email Account</label>
-                    <input type="email" id="email" required placeholder="example@gmail.com" class="w-full bg-[#2a3942] border border-transparent focus:border-[#00a884] rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Google Email / Account</label>
+                    <input type="email" id="email" required placeholder="name@gmail.com" class="w-full bg-[#2a3942] border border-transparent focus:border-[#00a884] rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Secure Password</label>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Password</label>
                     <input type="password" id="password" required placeholder="••••••••" class="w-full bg-[#2a3942] border border-transparent focus:border-[#00a884] rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-all">
                 </div>
                 
                 <div class="flex space-x-3 pt-2">
-                    <button type="submit" id="btn-login" class="flex-1 bg-[#00a884] hover:bg-[#009675] text-[#111b21] font-bold py-3.5 rounded-xl text-sm transition-all shadow-md active:scale-[0.98]">
+                    <button type="submit" id="btn-login" class="flex-1 bg-[#00a884] hover:bg-[#009675] text-[#111b21] font-bold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]">
                         Sign In
                     </button>
                     <button type="button" id="btn-register" class="flex-1 bg-transparent hover:bg-gray-800 border border-gray-600 text-white font-semibold py-3.5 rounded-xl text-sm transition-all active:scale-[0.98]">
@@ -51,94 +56,89 @@
         </div>
     </div>
 
-    <!-- MAIN WHATSAPP GRAPHICAL HUB -->
+    <!-- MAIN WHATSAPP APP STRUCTURE -->
     <div id="app-screen" class="hidden w-full h-screen-dynamic flex overflow-hidden">
         
-        <!-- SIDEBAR: LIST OF ACTIVE CONTACTS AND ROOMS -->
-        <div class="w-full md:w-[420px] bg-[#111b21] border-r border-[#222e35] flex flex-col flex-shrink-0">
-            <!-- Sidebar Header / User Dashboard -->
-            <div class="h-16 bg-[#202c33] flex items-center justify-between px-4">
+        <!-- SIDEBAR -->
+        <div class="w-full md:w-[400px] bg-[#111b21] border-r border-[#222e35] flex flex-col flex-shrink-0">
+            <!-- Sidebar Top Profile Info Header -->
+            <div class="h-16 bg-[#202c33] flex items-center justify-between px-4 flex-shrink-0">
                 <div class="flex items-center space-x-3">
-                    <div id="my-avatar" class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold text-white shadow-inner uppercase">K</div>
+                    <div id="my-avatar" class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-white shadow-inner uppercase">K</div>
                     <div class="overflow-hidden">
                         <p id="my-name" class="text-sm font-semibold text-white truncate">Connecting...</p>
-                        <p class="text-xs text-[#00a884] flex items-center"><span class="w-2 h-2 bg-[#00a884] rounded-full inline-block mr-1.5 animate-pulse"></span>Global Online</p>
+                        <p class="text-xs text-[#00a884] flex items-center"><span class="w-2 h-2 bg-[#00a884] rounded-full inline-block mr-1.5 animate-pulse"></span>Global Server Online</p>
                     </div>
                 </div>
-                <!-- Logout Panel Icon -->
+                <!-- Logout Panel -->
                 <button id="btn-logout" class="p-2 hover:bg-[#2a3942] rounded-full transition-all text-gray-400 hover:text-red-400" title="Sign Out">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                 </button>
             </div>
 
-            <!-- Custom Internal Info Banner -->
-            <div class="bg-[#182229] px-4 py-3 border-b border-[#222e35] text-xs text-gray-400 flex items-center justify-between">
-                <span>Welcome to the worldwide stream room.</span>
-            </div>
-
-            <!-- Dynamic Channels and Live Active Rooms List -->
-            <div class="flex-1 overflow-y-auto">
-                <!-- Chat Item 1: Global Main Feed -->
-                <div class="flex items-center px-4 py-3.5 bg-[#2a3942] cursor-pointer transition-all border-l-4 border-[#00a884]">
+            <!-- Thread Selection Panel -->
+            <div class="flex-1 scroller-zone">
+                <!-- Global Active Channel -->
+                <div class="flex items-center px-4 py-3.5 bg-[#2a3942] cursor-pointer border-l-4 border-[#00a884]">
                     <div class="w-12 h-12 bg-[#00a884]/20 text-[#00a884] rounded-full flex items-center justify-center font-bold text-xl mr-3 flex-shrink-0">🌐</div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
-                            <p class="text-sm font-semibold text-white truncate">Global Main Chatroom</p>
-                            <span class="text-[10px] text-[#00a884] font-medium bg-[#00a884]/10 px-2 py-0.5 rounded-full">ACTIVE</span>
+                            <p class="text-sm font-semibold text-white truncate">Global Chat Room</p>
+                            <span class="text-[10px] text-[#00a884] font-bold bg-[#00a884]/10 px-2 py-0.5 rounded-full">LIVE</span>
                         </div>
-                        <p class="text-xs text-gray-400 truncate mt-0.5">Real users communicating live right now...</p>
+                        <p class="text-xs text-gray-400 truncate mt-0.5">Chatting with real users around the world...</p>
                     </div>
                 </div>
 
-                <!-- Chat Item 2: Built-in Dedicated Bot Panel Shortcut -->
-                <div onclick="invokeBotShortcut()" class="flex items-center px-4 py-3.5 hover:bg-[#202c33] cursor-pointer border-b border-[#222e35]/40 transition-all">
+                <!-- Khamis AI Assistant Channel -->
+                <div onclick="invokeBotShortcut()" class="flex items-center px-4 py-3.5 hover:bg-[#202c33] cursor-pointer border-b border-[#222e35]/30 transition-all">
                     <div class="w-12 h-12 bg-amber-500 text-slate-900 rounded-full flex items-center justify-center font-bold text-xl mr-3 flex-shrink-0 shadow-md">🤖</div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between">
-                            <p class="text-sm font-semibold text-gray-200 truncate">Khamis AI Engine</p>
-                            <span class="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold uppercase">Assistant</span>
+                            <p class="text-sm font-semibold text-gray-200 truncate">Khamis AI Bot</p>
+                            <span class="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold uppercase">System</span>
                         </div>
-                        <p class="text-xs text-gray-400 truncate mt-0.5">Type @khamis anywhere to run prompt commands</p>
+                        <p class="text-xs text-gray-400 truncate mt-0.5">Type @khamis in chat to prompt AI instantly</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- MESSAGES CONTAINER WINDOW FRAME -->
+        <!-- MAIN MESSAGES CHAT AREA -->
         <div class="flex-1 flex flex-col h-full bg-[#0b141a] relative">
-            <!-- Background Graphic Matrix Override to look like WhatsApp -->
-            <div class="absolute inset-0 opacity-[0.04] pointer-events-none" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-repeat: repeat;"></div>
+            <!-- Full Screen WhatsApp Tiled Wall Artwork layer -->
+            <div class="absolute inset-0 opacity-[0.05] pointer-events-none" style="background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-repeat: repeat;"></div>
 
-            <!-- Top Chat Header Bar -->
+            <!-- Active Chat Header Top Bar -->
             <div class="h-16 bg-[#202c33] flex items-center justify-between px-6 border-b border-[#222e35] z-10 flex-shrink-0 shadow-sm">
                 <div class="flex items-center space-x-4">
                     <div class="w-10 h-10 bg-[#00a884]/10 text-[#00a884] rounded-full flex items-center justify-center font-semibold text-lg">#</div>
                     <div>
                         <h2 class="text-sm font-semibold text-white tracking-wide">🌐 Global Main Chatroom</h2>
-                        <p class="text-xs text-gray-400">All registered users sync safely here</p>
+                        <p class="text-xs text-gray-400">All users communicate globally here</p>
                     </div>
                 </div>
                 
-                <button onclick="invokeBotShortcut()" class="text-xs bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-full transition-all hover:bg-amber-400 active:scale-95 shadow-md flex items-center space-x-1">
-                    <span>⚡ Prompt AI</span>
+                <button onclick="invokeBotShortcut()" class="text-xs bg-amber-500 text-slate-950 font-bold px-3 py-1.5 rounded-full transition-all hover:bg-amber-400 active:scale-95 shadow-md">
+                    <span>⚡ Ask Khamis AI</span>
                 </button>
             </div>
 
-            <!-- Messaging Scroll View Box -->
-            <div id="messages-area" class="flex-1 overflow-y-auto p-6 space-y-3.5 flex flex-col z-10">
+            <!-- Dynamic Messages Display Window (With Up/Down Scrolling enabled) -->
+            <div id="messages-area" class="flex-1 scroller-zone p-6 space-y-4 z-10">
                 <div id="loading-spinner" class="my-auto text-center">
                     <div class="animate-spin rounded-full h-8 w-8 border-2 border-t-transparent border-[#00a884] mx-auto mb-2"></div>
-                    <p class="text-xs text-gray-400">Connecting securely to international chat grid...</p>
+                    <p class="text-xs text-gray-400">Establishing real network live connection sync...</p>
                 </div>
             </div>
 
-            <!-- Bottom Interactive Inputs Bar -->
+            <!-- Bottom Text Input Control Composer -->
             <div class="p-3 bg-[#202c33] border-t border-[#222e35] z-10 flex-shrink-0">
                 <form id="chat-composer" class="w-full max-w-6xl mx-auto flex items-center space-x-3">
                     <input 
                         type="text" 
                         id="msg-input" 
-                        placeholder="Type a real-time message... Use @khamis to talk with AI" 
+                        placeholder="Type a real message here... (use @khamis for AI bot)" 
                         autocomplete="off"
                         required
                         class="flex-1 bg-[#2a3942] text-sm text-white placeholder-gray-400 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-1 focus:ring-[#00a884] transition-all"
@@ -151,14 +151,13 @@
         </div>
     </div>
 
-    <!-- CORE INTEGRATION MODULE WRAPPER -->
+    <!-- SCRIPT APPLICATION CONFIGURATION ENGINE -->
     <script type="module">
-        // Import modular distributions from Firebase Content Delivery Networks (v10)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Your assigned explicit parameters configuration payload
+        // Your validated real-time Firestore database keys
         const firebaseConfig = {
             apiKey: "AIzaSyAsFeKfeYTIGzP221hwPlFBHPiYyy-TLqE",
             authDomain: "khamchat-1d5a4.firebaseapp.com",
@@ -169,16 +168,16 @@
             measurementId: "G-P7JRRZ3M2M"
         };
 
-        // Initialize Native Instances
-        const firebaseApp = initializeApp(firebaseConfig);
-        const firebaseAuth = getAuth(firebaseApp);
-        const database = getFirestore(firebaseApp);
+        // Core Init Modules
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // Core App Cache State Management
-        let authenticatedUser = null;
+        // State parameters
+        let currentUser = null;
         let activeNickname = "";
 
-        // UI View Layout Handles
+        // UI View Document Handles
         const authScreen = document.getElementById('auth-screen');
         const appScreen = document.getElementById('app-screen');
         const authForm = document.getElementById('auth-form');
@@ -188,178 +187,173 @@
         const msgInput = document.getElementById('msg-input');
         const spinner = document.getElementById('loading-spinner');
 
-        // Dynamic viewport height scaling initialization for robust screen balance
-        const setDocHeight = () => { document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); };
-        window.addEventListener('resize', setDocHeight);
-        window.addEventListener('orientationchange', setDocHeight);
-        setDocHeight();
+        // Layout dynamic height calculator wrapper initialization
+        const syncViewportHeight = () => { document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`); };
+        window.addEventListener('resize', syncViewportHeight);
+        window.addEventListener('orientationchange', syncViewportHeight);
+        syncViewportHeight();
 
-        // System Authentication Status Pipeline Watcher
-        onAuthStateChanged(firebaseAuth, (user) => {
+        // System Auth Monitor loop channel
+        onAuthStateChanged(auth, (user) => {
             if (user) {
-                authenticatedUser = user;
+                currentUser = user;
                 activeNickname = user.email.split('@')[0];
                 
-                // Toggle application visual interfaces
                 authScreen.classList.add('hidden');
                 appScreen.classList.remove('hidden');
                 
-                // Render Identity parameters inside sidebar layout panels
                 document.getElementById('my-name').textContent = activeNickname;
                 document.getElementById('my-avatar').textContent = activeNickname.charAt(0);
                 
-                startGlobalMessagingSync();
+                startStreamingDatabase();
             } else {
-                authenticatedUser = null;
+                currentUser = null;
                 appScreen.classList.add('hidden');
                 authScreen.classList.remove('hidden');
             }
         });
 
-        // Sign In Action Interceptor
+        // Sign In Action Click Controller
         document.getElementById('btn-login').addEventListener('click', async (e) => {
             e.preventDefault();
             clearAlert();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             
-            if (!email || !password) return displayAlert("Please supply authentication fields.");
+            if (!email || !password) return displayAlert("Fields cannot be left empty.");
 
             try {
-                await signInWithEmailAndPassword(firebaseAuth, email, password);
+                await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
-                displayAlert(mapFirebaseError(error.code));
+                displayAlert(translateError(error.code));
             }
         });
 
-        // Registration Action Interceptor
+        // Create Account Action Registration Controller
         document.getElementById('btn-register').addEventListener('click', async (e) => {
             e.preventDefault();
             clearAlert();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
-            if (!email || !password) return displayAlert("Please supply authentication fields.");
-            if (password.length < 6) return displayAlert("Password length must exceed 5 positions.");
+            if (!email || !password) return displayAlert("Fields cannot be left empty.");
+            if (password.length < 6) return displayAlert("Password must contain at least 6 characters.");
 
             try {
-                await createUserWithEmailAndPassword(firebaseAuth, email, password);
+                await createUserWithEmailAndPassword(auth, email, password);
             } catch (error) {
-                displayAlert(mapFirebaseError(error.code));
+                displayAlert(translateError(error.code));
             }
         });
 
-        // Sign Out Controller Action
+        // Sign Out Event Trigger
         document.getElementById('btn-logout').addEventListener('click', () => {
-            signOut(firebaseAuth).catch(err => console.error("Exit processing fault:", err));
+            signOut(auth).catch(err => console.error("Exit fault processing:", err));
         });
 
-        // Active Real-Time Message Database Syncing Channel Engine
-        function startGlobalMessagingSync() {
-            const documentReferenceCollection = collection(database, "global_chat_stream");
-            const queryChronologyParameters = query(documentReferenceCollection, orderBy("createdAt", "asc"), limit(120));
+        // Real-Time Message Database Syncing Loop Engine
+        function startStreamingDatabase() {
+            const docCollectionRef = collection(db, "global_chat_stream");
+            const cursorQueryParam = query(docCollectionRef, orderBy("createdAt", "asc"), limit(150));
 
-            onSnapshot(queryChronologyParameters, (snapshot) => {
+            onSnapshot(cursorQueryParam, (snapshot) => {
                 if (spinner) spinner.remove();
                 messagesArea.innerHTML = '';
 
                 if(snapshot.empty) {
                     messagesArea.innerHTML = `
                         <div class="my-auto text-center text-gray-500 py-6">
-                            <p class="text-base font-semibold text-gray-400">Welcome to KhamChat World Stream!</p>
-                            <p class="text-xs max-w-xs mx-auto mt-1">There are no global log entries recorded yet. Type a real message to populate the global matrix frame instantly.</p>
+                            <p class="text-base font-semibold text-gray-400">Welcome to KhamChat!</p>
+                            <p class="text-xs max-w-xs mx-auto mt-1">No messages yet. Send a real-time global live message to open the stream workspace.</p>
                         </div>
                     `;
                     return;
                 }
 
                 snapshot.forEach((doc) => {
-                    const packetData = doc.data();
-                    const isAuthorSelf = packetData.uid === authenticatedUser.uid;
-                    const isKhamisAI = packetData.uid === "SYSTEM_KHAMIS_AI";
+                    const data = doc.data();
+                    const isSelf = data.uid === currentUser.uid;
+                    const isBot = data.uid === "SYSTEM_KHAMIS_AI";
 
-                    // Create responsive flexing bubble shell row structure
-                    const bubbleRow = document.createElement('div');
-                    bubbleRow.className = `flex flex-col w-full ${isAuthorSelf ? 'items-end' : 'items-start'}`;
+                    const bubbleContainerRow = document.createElement('div');
+                    bubbleContainerRow.className = `flex flex-col w-full ${isSelf ? 'items-end' : 'items-start'}`;
 
-                    let timestampLabel = "Live";
-                    if (packetData.createdAt) {
-                        timestampLabel = packetData.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    let timestamp = "Live";
+                    if (data.createdAt) {
+                        timestamp = data.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     }
 
-                    let visualThemeStyles = "bg-[#202c33] text-gray-100 rounded-tl-none";
-                    if (isAuthorSelf) {
-                        visualThemeStyles = "bg-[#005c4b] text-white rounded-tr-none";
-                    } else if (isKhamisAI) {
-                        visualThemeStyles = "bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-tl-none font-medium border border-amber-500/20 shadow-md animate-fade-in";
+                    let bubbleStyle = "bg-[#202c33] text-gray-100 rounded-tl-none";
+                    if (isSelf) {
+                        bubbleStyle = "bg-[#005c4b] text-white rounded-tr-none";
+                    } else if (isBot) {
+                        bubbleStyle = "bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-tl-none font-medium border border-amber-500/20 shadow-md";
                     }
 
-                    bubbleRow.innerHTML = `
+                    bubbleContainerRow.innerHTML = `
                         <div class="max-w-[85%] md:max-w-[70%] min-w-[90px]">
-                            <span class="text-[11px] font-medium text-gray-400 px-1 block mb-0.5 ${isAuthorSelf ? 'text-right' : ''}">
-                                ${isKhamisAI ? '🤖 Khamis AI Bot' : (isAuthorSelf ? 'You' : packetData.senderName)}
+                            <span class="text-[11px] font-medium text-gray-400 px-1 block mb-0.5 ${isSelf ? 'text-right' : ''}">
+                                ${isBot ? '🤖 Khamis AI Bot' : (isSelf ? 'You' : data.senderName)}
                             </span>
-                            <div class="px-3.5 py-2 rounded-xl text-[14px] break-words shadow-sm ${visualThemeStyles}">
-                                <p class="leading-normal whitespace-pre-wrap">${escapeXSS(packetData.messageBody)}</p>
-                                <span class="text-[9px] text-gray-400/90 block text-right mt-1 select-none font-normal">${timestampLabel}</span>
+                            <div class="px-3.5 py-2 rounded-xl text-[14px] break-words shadow-sm ${bubbleStyle}">
+                                <p class="leading-normal whitespace-pre-wrap">${stripHTML(data.messageBody)}</p>
+                                <span class="text-[9px] text-gray-400/90 block text-right mt-1 select-none font-normal">${timestamp}</span>
                             </div>
                         </div>
                     `;
-                    messagesArea.appendChild(bubbleRow);
+                    messagesArea.appendChild(bubbleContainerRow);
                 });
 
-                // Smooth scrolling anchor focus alignment loop trigger down
+                // Instantly align screen scroll layout window directly to the absolute bottom message node
                 messagesArea.scrollTop = messagesArea.scrollHeight;
             }, (error) => {
-                console.error("Snapshot error pipeline block:", error);
-                messagesArea.innerHTML = `<div class="m-auto p-4 bg-red-950/30 border border-red-500/20 text-red-400 rounded-xl text-xs text-center max-w-xs">Firestore Access Blocked. Confirm your database rules allow read/write access.</div>`;
+                console.error("Database sync issue:", error);
+                messagesArea.innerHTML = `<div class="m-auto p-4 bg-red-950/30 border border-red-500/20 text-red-400 rounded-xl text-xs text-center max-w-xs">Access Refused. Please make sure your Firestore Database Rules are set to allow reads and writes.</div>`;
             });
         }
 
-        // Send Message Handler
+        // Post Data Action Event Interface Pipeline
         chatComposer.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const messageBodyString = msgInput.value.trim();
-            if(!messageBodyString || !authenticatedUser) return;
+            const rawBody = msgInput.value.trim();
+            if(!rawBody || !currentUser) return;
 
             msgInput.value = '';
 
             try {
-                // Post record structure to remote cluster
-                await addDoc(collection(database, "global_chat_stream"), {
-                    messageBody: messageBodyString,
+                await addDoc(collection(db, "global_chat_stream"), {
+                    messageBody: rawBody,
                     senderName: activeNickname,
-                    uid: authenticatedUser.uid,
+                    uid: currentUser.uid,
                     createdAt: serverTimestamp()
                 });
 
-                // Intercept Bot Tag
-                if (messageBodyString.toLowerCase().includes('@khamis')) {
-                    executeKhamisAIAutomatedLogic(messageBodyString);
+                if (rawBody.toLowerCase().includes('@khamis')) {
+                    executeKhamisAIEngine(rawBody);
                 }
 
             } catch (err) {
-                console.error("Post exception fault:", err);
+                console.error("Transmission layout block error:", err);
             }
         });
 
-        // Khamis AI Bot Processing Module
-        function executeKhamisAIAutomatedLogic(textCommand) {
+        // Automated Intelligence processing channel block
+        function executeKhamisAIEngine(inputMessage) {
             setTimeout(async () => {
-                let solutionString = `Hello ${activeNickname}! I am Khamis AI. Your globally routed command was registered correctly. Let me know how I can build or assist your future plans today! 🌟`;
-                const queryText = textCommand.toLowerCase();
+                let botOutput = `Hello ${activeNickname}! I am Khamis AI. Your globally routed command was registered correctly. Let me know how I can build or assist your future plans today! 🌟`;
+                const processedString = inputMessage.toLowerCase();
 
-                if (queryText.includes('hello') || queryText.includes('hi ')) {
-                    solutionString = `Greetings, ${activeNickname}! Welcome to KhamChat. Users around the world can see this response in real-time.`;
-                } else if (queryText.includes('help')) {
-                    solutionString = "KhamChat Help Desk: This is a completely open global messaging workspace. Tag me anywhere using `@khamis` to run automated smart replies instantly!";
-                } else if (queryText.includes('future')) {
-                    solutionString = "Your future looks extremely promising! Keep coding, building, and exploring network infrastructures. Every great platform starts with a single file.";
+                if (processedString.includes('hello') || processedString.includes('hi ')) {
+                    botOutput = `Greetings, ${activeNickname}! Welcome to KhamChat. Users around the world can see this response in real-time.`;
+                } else if (processedString.includes('help')) {
+                    botOutput = "KhamChat Help Desk: This is a completely open global messaging workspace. Tag me anywhere using `@khamis` to run automated smart replies instantly!";
+                } else if (processedString.includes('future')) {
+                    botOutput = "Your future looks extremely promising! Keep coding, building, and exploring network infrastructures. Every great platform starts with a single file.";
                 }
 
                 try {
-                    await addDoc(collection(database, "global_chat_stream"), {
-                        messageBody: solutionString,
+                    await addDoc(collection(db, "global_chat_stream"), {
+                        messageBody: botOutput,
                         senderName: "Khamis AI",
                         uid: "SYSTEM_KHAMIS_AI",
                         createdAt: serverTimestamp()
@@ -367,26 +361,25 @@
                 } catch (e) {
                     console.error("AI node push failed:", e);
                 }
-            }, 1100);
+            }, 1000);
         }
 
-        // Functional Helpers
+        // Core UI helpers
         function displayAlert(msg) { authAlert.textContent = msg; authAlert.classList.remove('hidden'); }
         function clearAlert() { authAlert.textContent = ""; authAlert.classList.add('hidden'); }
-        function escapeXSS(stringText) {
-            return stringText.replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match] || match));
+        function stripHTML(text) {
+            return text.replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match] || match));
         }
-        function mapFirebaseError(code) {
+        function translateError(code) {
             switch(code) {
-                case 'auth/invalid-credential': return 'Incorrect login password or user parameters.';
-                case 'auth/email-already-in-use': return 'This email registration identity is occupied.';
-                case 'auth/weak-password': return 'The chosen password string is too weak.';
-                case 'auth/invalid-email': return 'The email layout formatting structure is invalid.';
-                default: return `Operation failed: ${code}`;
+                case 'auth/invalid-credential': return 'Incorrect password string or account email details.';
+                case 'auth/email-already-in-use': return 'The requested email address registration identity is already taken.';
+                case 'auth/weak-password': return 'Password configuration string is too simple.';
+                case 'auth/invalid-email': return 'The email address format you supplied is structured incorrectly.';
+                default: return `Operation process block error: ${code}`;
             }
         }
 
-        // Expose helper shortcuts to standard window context safely
         window.invokeBotShortcut = function() {
             msgInput.value = "@khamis ";
             msgInput.focus();
