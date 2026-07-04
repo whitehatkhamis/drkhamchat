@@ -4,59 +4,69 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#4C1D95">
-<link rel="manifest" href="/manifest.json">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiS2hhbUNoYXQiLCJzaG9ydF9uYW1lIjoiS2hhbUNoYXQiLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzRDMEQ5NSIsInRoZW1lX2NvbG9yIjoiI0ZGRDcwMCJ9">
 <title>KhamChat Pro - Site of the Year</title>
 <style>
 :root{
     --bg1:#4C1D95; --bg2:#7C3AED; --bg3:#EDE9FE;
-    --card:rgba(255,255,255,0.95); --text:#1E1B4B; --accent:#FFD700; --accent2:#F59E0B; --green:#22C55E;
+    --card:rgba(255,255,255,0.95); --text:#1E1B4B; --accent:#FFD700; --accent2:#F59E0B; --green:#22C55E; --red:#EF4444;
 }
 [data-theme="dark"]{
     --bg1:#2E1065; --bg2:#4C1D95; --bg3:#1E1B4B;
     --card:rgba(30,27,75,0.9); --text:#F5F3FF; --accent:#FFD700; --accent2:#F59E0B;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;-webkit-tap-highlight-color:transparent;}
 body{background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 50%, var(--bg3) 100%);color:var(--text);height:100vh;overflow:hidden;}
-.login-box{background:var(--card);backdrop-filter:blur(20px);padding:30px;border-radius:20px;width:90%;max-width:350px;margin:20vh auto;box-shadow:0 8px 32px rgba(76,29,149,0.3);border:1px solid var(--accent);}
-.login-box h1{text-align:center;color:var(--accent2);margin-bottom:20px;font-size:28px;font-weight:800;}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid rgba(124,58,237,0.3);border-radius:10px;font-size:16px;background:var(--card);color:var(--text);outline:none;}
-button{width:100%;padding:12px;background:linear-gradient(90deg, var(--accent), var(--accent2));color:#1E1B4B;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin-top:10px;font-weight:bold;}
+.login-box{background:var(--card);backdrop-filter:blur(20px);padding:30px;border-radius:20px;width:90%;max-width:350px;margin:20vh auto;box-shadow:0 8px 32px rgba(76,29,149,0.4);border:2px solid var(--accent);animation:fadeIn 0.5s;}
+@keyframes fadeIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.login-box h1{text-align:center;color:var(--accent2);margin-bottom:20px;font-size:32px;font-weight:800;background:linear-gradient(90deg, var(--accent), var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+input{width:100%;padding:14px;margin:10px 0;border:2px solid rgba(124,58,237,0.3);border-radius:12px;font-size:16px;background:var(--card);color:var(--text);outline:none;transition:0.3s;}
+input:focus{border-color:var(--accent);}
+button{width:100%;padding:14px;background:linear-gradient(90deg, var(--accent), var(--accent2));color:#1E1B4B;border:none;border-radius:12px;font-size:16px;cursor:pointer;margin-top:10px;font-weight:bold;transition:0.2s;}
+button:active{transform:scale(0.97);}
 .toggle{text-align:center;margin-top:15px;color:var(--accent2);cursor:pointer;font-weight:600;}
 #chatApp{display:none;height:100%;width:100%;}
-.topbar{height:55px;background:var(--card);backdrop-filter:blur(15px);display:flex;align-items:center;padding:0 15px;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;}
-.topbar h1{font-size:20px;font-weight:800;background:linear-gradient(90deg, var(--accent), var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.top-icons{margin-left:auto;display:flex;gap:15px;font-size:22px;cursor:pointer;}
-.search-box{padding:10px;background:var(--card);}
+.topbar{height:60px;background:var(--card);backdrop-filter:blur(20px);display:flex;align-items:center;padding:0 15px;border-bottom:3px solid var(--accent);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+.topbar h1{font-size:22px;font-weight:800;background:linear-gradient(90deg, var(--accent), var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.top-icons{margin-left:auto;display:flex;gap:18px;font-size:24px;cursor:pointer;}
+.search-box{padding:12px;background:var(--card);}
 .search-box input{margin:0;}
-.chat-list{overflow-y:auto;height:calc(100% - 120px);padding-bottom:10px;}
-.chat-item{display:flex;padding:12px;gap:12px;cursor:pointer;background:var(--card);margin:8px;border-radius:15px;position:relative;}
-.avatar{width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg, var(--accent), var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;color:#1E1B4B;font-weight:bold;position:relative;}
-.online-dot{width:12px;height:12px;background:var(--green);border-radius:50%;position:absolute;bottom:2px;right:2px;border:2px solid var(--card);}
-.unread{position:absolute;right:10px;top:15px;background:red;color:white;border-radius:50%;padding:2px 6px;font-size:12px;}
+.chat-list{overflow-y:auto;height:calc(100% - 122px);padding-bottom:10px;}
+.chat-item{display:flex;padding:14px;gap:12px;cursor:pointer;background:var(--card);margin:8px;border-radius:18px;position:relative;transition:0.2s;}
+.chat-item:active{transform:scale(0.98);}
+.avatar{width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg, var(--accent), var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;color:#1E1B4B;font-weight:bold;position:relative;}
+.online-dot{width:14px;height:14px;background:var(--green);border-radius:50%;position:absolute;bottom:0;right:0;border:3px solid var(--card);}
+.unread{position:absolute;right:12px;top:15px;background:var(--red);color:white;border-radius:50%;padding:3px 7px;font-size:12px;font-weight:bold;}
 .chat-screen{display:none;flex-direction:column;height:100%;width:100%;}
-.chat-header{height:55px;background:var(--card);backdrop-filter:blur(15px);display:flex;align-items:center;padding:0 15px;border-bottom:2px solid var(--accent);font-size:18px;font-weight:700;color:var(--accent2);gap:10px;}
-.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px;padding-bottom:120px;}
-.message{padding:12px 16px;border-radius:18px;max-width:75%;word-wrap:break-word;position:relative;}
+.chat-header{height:60px;background:var(--card);backdrop-filter:blur(20px);display:flex;align-items:center;padding:0 15px;border-bottom:3px solid var(--accent);font-size:18px;font-weight:700;color:var(--accent2);gap:10px;}
+.messages{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:10px;padding-bottom:80px;background:transparent;}
+.message{padding:12px 16px;border-radius:18px;max-width:78%;word-wrap:break-word;position:relative;animation:slideUp 0.3s;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .me{background:linear-gradient(135deg, var(--accent), var(--accent2));color:#1E1B4B;align-self:flex-end;border-bottom-right-radius:5px;}
-.other{background:var(--card);color:var(--text);align-self:flex-start;border-bottom-left-radius:5px;border:1px solid rgba(124,58,237,0.3);}
+.other{background:var(--card);color:var(--text);align-self:flex-start;border-bottom-left-radius:5px;border:2px solid rgba(124,58,237,0.2);}
 .typing{font-size:12px;color:var(--accent2);padding:5px 15px;font-style:italic;}
-.input-area{display:flex;padding:10px;background:var(--card);backdrop-filter:blur(15px);gap:8px;border-top:2px solid var(--accent);position:fixed;bottom:0;left:0;width:100%;z-index:200;align-items:center;flex-wrap:wrap;}
-.chat-input{flex:1;padding:12px 16px;border:none;border-radius:25px;background:var(--card);color:var(--text);font-size:16px;outline:none;border:1px solid rgba(124,58,237,0.3);min-height:42px;}
-.icon-btn{padding:10px;background:transparent;border:none;color:var(--accent2);font-size:20px;cursor:pointer;}
-.send-btn{padding:12px;background:linear-gradient(90deg, var(--accent), var(--accent2));color:#1E1B4B;border:none;border-radius:50%;cursor:pointer;font-size:18px;width:42px;height:42px;}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:300;align-items:center;justify-content:center;}
-.modal-content{background:var(--card);padding:20px;border-radius:20px;width:90%;max-width:400px;border:2px solid var(--accent);}
-.emoji-picker{display:none;position:absolute;bottom:60px;right:10px;background:var(--card);padding:10px;border-radius:15px;width:300px;height:200px;overflow-y:auto;z-index:250;}
-.emoji{font-size:24px;padding:5px;cursor:pointer;}
-#loadingScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg, var(--bg1), var(--bg2));display:flex;align-items:center;justify-content:center;z-index:999;}
-.loader{border:4px solid rgba(255,215,0,0.3);border-top:4px solid var(--accent);border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite;}
+.input-area{display:flex;padding:10px;background:var(--card);backdrop-filter:blur(20px);gap:8px;border-top:3px solid var(--accent);position:fixed;bottom:0;left:0;width:100%;z-index:200;align-items:center;}
+.chat-input{flex:1;padding:14px 18px;border:none;border-radius:25px;background:var(--card);color:var(--text);font-size:16px;outline:none;border:2px solid rgba(124,58,237,0.3);}
+.send-btn{padding:14px;background:linear-gradient(90deg, var(--accent), var(--accent2));color:#1E1B4B;border:none;border-radius:50%;cursor:pointer;font-size:20px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(10px);}
+.modal-content{background:var(--card);padding:20px;border-radius:20px;width:90%;max-width:400px;border:2px solid var(--accent);animation:fadeIn 0.3s;}
+.message-actions{position:absolute;background:var(--card);padding:8px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.3);z-index:400;display:none;gap:10px;}
+.action-btn{padding:8px 12px;background:linear-gradient(90deg, var(--accent), var(--accent2));border:none;border-radius:8px;color:#1E1B4B;font-weight:600;cursor:pointer;}
+.context-menu{position:fixed;background:var(--card);border-radius:12px;padding:8px;box-shadow:0 8px 32px rgba(0,0,0,0.3);z-index:500;display:none;border:2px solid var(--accent);}
+.context-item{padding:12px 20px;cursor:pointer;border-radius:8px;font-weight:500;}
+.context-item:hover{background:rgba(124,58,237,0.1);}
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;max-height:250px;overflow-y:auto;padding:10px;}
+.emoji{font-size:28px;padding:8px;cursor:pointer;text-align:center;border-radius:8px;}
+.emoji:hover{background:rgba(124,58,237,0.1);}
+#loadingScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg, var(--bg1), var(--bg2));display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:20px;}
+.loader{border:5px solid rgba(255,215,0,0.3);border-top:5px solid var(--accent);border-radius:50%;width:60px;height:60px;animation:spin 1s linear infinite;}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-img.chat-img{max-width:200px;border-radius:10px;margin-top:5px;}
-audio{max-width:200px;margin-top:5px;}
+img.chat-img{max-width:220px;border-radius:12px;margin-top:5px;cursor:pointer;}
+audio{max-width:220px;margin-top:5px;}
 </style>
 </head>
 <body>
-<div id="loadingScreen"><div class="loader"></div></div>
+<div id="loadingScreen"><div class="loader"></div><h2 style="color:var(--accent)">KhamChat</h2></div>
 
 <div id="loginScreen" style="display:none;">
     <div class="login-box">
@@ -66,7 +76,7 @@ audio{max-width:200px;margin-top:5px;}
         <input id="password" type="password" placeholder="Enter Password" />
         <button id="authBtn" onclick="auth()">Login</button>
         <div class="toggle" id="toggleText" onclick="toggleForm()">Don't have account? Register</div>
-        <p id="error" style="color:#EF4444;text-align:center;margin-top:10px;"></p>
+        <p id="error" style="color:var(--red);text-align:center;margin-top:10px;"></p>
     </div>
 </div>
 
@@ -81,8 +91,8 @@ audio{max-width:200px;margin-top:5px;}
         </div>
         <div class="search-box"><input id="searchInput" type="text" placeholder="Search chats..." onkeyup="searchChats()"></div>
         <div class="chat-list" id="chatList">
-            <div class="chat-item" onclick="openChat('global','Global Room')"><div class="avatar">🌍</div><div><b>Global Room</b></div></div>
-            <div class="chat-item" onclick="openChat('groq-ai','Groq AI Bot')"><div class="avatar">🤖</div><div><b>Groq AI Bot</b></div></div>
+            <div class="chat-item" onclick="openChat('global','Global Room')"><div class="avatar">🌍</div><div><b>Global Room</b><br><small>Public Chat</small></div></div>
+            <div class="chat-item" onclick="openChat('groq-ai','Groq AI Bot')"><div class="avatar">🤖</div><div><b>Groq AI Bot</b><br><small>Ask anything /imagine</small></div></div>
             <div id="privateChats"></div>
         </div>
     </div>
@@ -92,141 +102,77 @@ audio{max-width:200px;margin-top:5px;}
         <div class="messages" id="messages"></div>
         <div class="typing" id="typingIndicator"></div>
         <div class="input-area">
-            <button class="icon-btn" onclick="toggleEmoji()">😀</button>
-            <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="uploadFile(event)">
-            <button class="icon-btn" onclick="document.getElementById('fileInput').click()">📎</button>
-            <button class="icon-btn" id="micBtn" onmousedown="startRecording()" onmouseup="stopRecording()">🎤</button>
-            <input class="chat-input" id="messageInput" placeholder="Type a message..." oninput="sendTyping()" />
+            <input class="chat-input" id="messageInput" placeholder="Type a message... Long press for more" />
             <button class="send-btn" onclick="sendMessage()">➤</button>
         </div>
-        <div class="emoji-picker" id="emojiPicker"></div>
     </div>
 </div>
 
-<div id="settingsModal" class="modal">
-    <div class="modal-content">
-        <h2>Settings</h2>
-        <div class="setting-row"><span>Theme</span><select id="themeSelect" onchange="changeTheme()"><option value="light">Light</option><option value="dark">Dark</option></select></div>
-        <button onclick="closeSettings()">Close</button>
-    </div>
-</div>
+<div id="settingsModal" class="modal"><div class="modal-content"><h2>Settings</h2><div style="padding:12px 0;"><span>Theme</span><select id="themeSelect" onchange="changeTheme()" style="float:right;"><option value="light">Light</option><option value="dark">Dark</option></select></div><button onclick="closeSettings()">Close</button></div></div>
+<div id="contextMenu" class="context-menu"></div>
+<div id="messageActions" class="message-actions"><button class="action-btn" onclick="copyMessage()">Copy</button><button class="action-btn" onclick="deleteMessage()">Delete</button><button class="action-btn" onclick="replyMessage()">Reply</button></div>
+<input type="file" id="fileInput" accept="image/*" style="display:none">
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, setDoc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-storage.js";
 
-const firebaseConfig = {
-apiKey: "AIzaSyAkN35nsJgxKvtVKTH2Y-IIg_jfr2fvDbI",
-authDomain: "khamchat-vip.firebaseapp.com",
-projectId: "khamchat-vip",
-storageBucket: "khamchat-vip.firebasestorage.app",
-messagingSenderId: "1085659754446",
-appId: "1:1085659754446:web:2d61fd965ef97044aec59f"
-};
+const firebaseConfig = {apiKey: "AIzaSyAkN35nsJgxKvtVKTH2Y-IIg_jfr2fvDbI",authDomain: "khamchat-vip.firebaseapp.com",projectId: "khamchat-vip",storageBucket: "khamchat-vip.firebasestorage.app",messagingSenderId: "1085659754446",appId: "1:1085659754446:web:2d61fd965ef97044aec59f"};
+const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app); const storage = getStorage(app);
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+let currentUser=null,currentRoom="global",unsubscribe=null,isLogin=true,userProfile={},longPressTimer,selectedMessageId=null,selectedMessageData=null,replyTo=null;
+const emojis=["😀","😂","❤️","🔥","👍","🙏","💯","😭","😍","🥰","😎","🤔","👏","🎉","✨","💪","🙌","😊","😁","🤣","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠"];
 
-let currentUser = null; let currentRoom = "global"; let unsubscribe = null; let isLogin = true; let userProfile = {};
-let mediaRecorder; let audioChunks = []; let typingTimeout;
+applyTheme(); generateEmojis();
 
-applyTheme();
-generateEmojis();
+function applyTheme(){const theme=localStorage.getItem("theme")||"light";if(theme==="dark"){document.documentElement.setAttribute("data-theme","dark");}document.getElementById("themeSelect").value=theme;}
+window.changeTheme=function(){const theme=document.getElementById("themeSelect").value;localStorage.setItem("theme",theme);applyTheme();}
+window.openSettings=()=>{document.getElementById("settingsModal").style.display="flex"}
+window.closeSettings=()=>{document.getElementById("settingsModal").style.display="none"}
 
-function applyTheme(){ const theme = localStorage.getItem("theme") || "light"; if(theme === "dark"){ document.documentElement.setAttribute("data-theme", "dark"); } document.getElementById("themeSelect").value = theme; }
-window.changeTheme = function(){ const theme = document.getElementById("themeSelect").value; localStorage.setItem("theme", theme); applyTheme(); }
-window.openSettings = ()=>{document.getElementById("settingsModal").style.display="flex"}
-window.closeSettings = ()=>{document.getElementById("settingsModal").style.display="none"}
+window.toggleForm=function(){isLogin=!isLogin;document.getElementById("authBtn").innerText=isLogin?"Login":"Register";document.getElementById("toggleText").innerText=isLogin?"Don't have account? Register":"Have an account? Login";}
+window.auth=async function(){const username=document.getElementById("username").value;const email=document.getElementById("email").value;const password=document.getElementById("password").value;try{if(isLogin){await signInWithEmailAndPassword(auth,email,password);}else{if(username===""){alert("Enter username");return;}const userCred=await createUserWithEmailAndPassword(auth,email,password);await setDoc(doc(db,"users",userCred.user.uid),{username,email,online:true,lastSeen:serverTimestamp()});}}catch(e){document.getElementById("error").innerText=e.message;}}
 
-window.toggleForm = function(){ isLogin =!isLogin; document.getElementById("authBtn").innerText = isLogin? "Login" : "Register"; document.getElementById("toggleText").innerText = isLogin? "Don't have account? Register" : "Have an account? Login"; }
-window.auth = async function(){
-    const username = document.getElementById("username").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    try{
-        if(isLogin){ await signInWithEmailAndPassword(auth, email, password); }
-        else{ if(username === ""){alert("Enter username"); return;} const userCred = await createUserWithEmailAndPassword(auth, email, password); await setDoc(doc(db, "users", userCred.user.uid), { username, email, online:true, lastSeen:serverTimestamp() }); }
-    }catch(e){ document.getElementById("error").innerText = e.message; }
-}
+window.logout=async function(){if(currentUser)await updateDoc(doc(db,"users",currentUser.uid),{online:false,lastSeen:serverTimestamp()});await signOut(auth);localStorage.clear();location.reload();}
 
-window.logout = async function(){ if(currentUser) await updateDoc(doc(db,"users",currentUser.uid),{online:false,lastSeen:serverTimestamp()}); await signOut(auth); localStorage.clear(); location.reload(); }
+onAuthStateChanged(auth,async(user)=>{document.getElementById("loadingScreen").style.display="none";if(user){currentUser=user;await updateDoc(doc(db,"users",user.uid),{online:true});const userDoc=await getDoc(doc(db,"users",user.uid));if(userDoc.exists())userProfile=userDoc.data();document.getElementById("loginScreen").style.display="none";document.getElementById("chatApp").style.display="block";loadPrivateUsers();}else{currentUser=null;document.getElementById("loginScreen").style.display="flex";document.getElementById("chatApp").style.display="none";}});
 
-onAuthStateChanged(auth, async (user) => {
-    document.getElementById("loadingScreen").style.display = "none";
-    if(user){
-        currentUser = user; if(userProfile.username) await updateDoc(doc(db,"users",user.uid),{online:true});
-        const userDoc = await getDoc(doc(db, "users", user.uid)); if(userDoc.exists()) userProfile = userDoc.data();
-        document.getElementById("loginScreen").style.display = "none"; document.getElementById("chatApp").style.display = "block"; loadPrivateUsers();
-    } else { currentUser = null; document.getElementById("loginScreen").style.display = "flex"; document.getElementById("chatApp").style.display = "none"; }
-});
+window.openChat=async function(room,name){if(room!=="global"&&room!=="groq-ai"){const uid=room.split("_").find(id=>id!==currentUser.uid);const userDoc=await getDoc(doc(db,"users",uid));if(userDoc.exists()){name=userDoc.data().username;document.getElementById("onlineStatus").innerText=userDoc.data().online?"Online":"Offline";}}currentRoom=room;document.getElementById("roomName").innerText=name;document.getElementById("homeScreen").style.display="none";document.getElementById("chatScreen").style.display="flex";if(unsubscribe)unsubscribe();loadMessages();}
+window.goHome=function(){document.getElementById("homeScreen").style.display="block";document.getElementById("chatScreen").style.display="none";if(unsubscribe)unsubscribe();}
 
-window.openChat = async function(room, name){
-    if(room!== "global" && room!== "groq-ai"){ const uid = room.split("_").find(id => id!== currentUser.uid); const userDoc = await getDoc(doc(db, "users", uid)); if(userDoc.exists()){ name = userDoc.data().username; document.getElementById("onlineStatus").innerText = userDoc.data().online? "Online" : "Offline"; } }
-    currentRoom = room; document.getElementById("roomName").innerText = name; document.getElementById("homeScreen").style.display = "none"; document.getElementById("chatScreen").style.display = "flex"; if(unsubscribe) unsubscribe(); loadMessages();
-}
-window.goHome = function(){ document.getElementById("homeScreen").style.display = "block"; document.getElementById("chatScreen").style.display = "none"; if(unsubscribe) unsubscribe(); }
+document.getElementById("messageInput").addEventListener("mousedown",()=>{longPressTimer=setTimeout(showContextMenu,600);});
+document.getElementById("messageInput").addEventListener("mouseup",()=>{clearTimeout(longPressTimer);});
+document.getElementById("messageInput").addEventListener("input",()=>{if(currentRoom!=="global"&&currentRoom!=="groq-ai")updateDoc(doc(db,"users",currentUser.uid),{typing:true});clearTimeout(window.typingTimeout);window.typingTimeout=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{typing:false}),2000);});
 
-window.sendTyping = function(){ if(currentRoom==="global"||currentRoom==="groq-ai")return; updateDoc(doc(db,"users",currentUser.uid),{typing:true}); clearTimeout(typingTimeout); typingTimeout=setTimeout(()=>updateDoc(doc(db,"users",currentUser.uid),{typing:false}),2000); }
+function showContextMenu(){document.getElementById("contextMenu").style.display="block";document.getElementById("contextMenu").style.left="50px";document.getElementById("contextMenu").style.bottom="70px";document.getElementById("contextMenu").innerHTML=`<div class="context-item" onclick="openEmojiPicker()">😀 Emojis</div><div class="context-item" onclick="document.getElementById('fileInput').click()">📎 Upload Photo</div><div class="context-item" onclick="startVoiceRecord()">🎤 Voice Message</div>`;}
+document.addEventListener("click",()=>{document.getElementById("contextMenu").style.display="none";});
 
-window.sendMessage = async function(){
-    const input = document.getElementById("messageInput"); const text = input.value.trim(); if(!text) return;
-    const displayName = userProfile.username || currentUser.email.split("@")[0];
-    if(currentRoom === "groq-ai"){ await addDoc(collection(db,"groq-ai"),{name:displayName,uid:currentUser.uid,text,createdAt:serverTimestamp()}); callGroqAPI(text); }
-    else{ await addDoc(collection(db,"messages"),{room:currentRoom,name:displayName,uid:currentUser.uid,text,createdAt:serverTimestamp()}); }
-    input.value = "";
-};
+window.sendMessage=async function(){const input=document.getElementById("messageInput");const text=input.value.trim();if(!text)return;const displayName=userProfile.username||currentUser.email.split("@")[0];let msgData={room:currentRoom,name:displayName,uid:currentUser.uid,text,createdAt:serverTimestamp()};if(replyTo)msgData.replyTo=replyTo;if(currentRoom==="groq-ai"){await addDoc(collection(db,"groq-ai"),{name:displayName,uid:currentUser.uid,text,createdAt:serverTimestamp()});callGroqAPI(text);}else{await addDoc(collection(db,"messages"),msgData);}input.value="";replyTo=null;}
 
-async function callGroqAPI(userMsg){
-    const type = userMsg.startsWith("/imagine")? "image" : "text";
-    const res = await fetch("/api/chat", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ message: userMsg, type }) });
-    const data = await res.json(); await addDoc(collection(db,"groq-ai"),{name:"Groq AI",uid:"ai",text:data.reply,type:data.type,createdAt:serverTimestamp()});
-}
+async function callGroqAPI(userMsg){const type=userMsg.startsWith("/imagine")?"image":"text";const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:userMsg,type})});const data=await res.json();await addDoc(collection(db,"groq-ai"),{name:"Groq AI",uid:"ai",text:data.reply,type:data.type,createdAt:serverTimestamp()});}
 
-function loadMessages(){
-    const box = document.getElementById("messages");
-    let q = query(collection(db,"messages"),orderBy("createdAt"));
-    if(currentRoom === "groq-ai") q = query(collection(db,"groq-ai"),orderBy("createdAt"));
-    unsubscribe = onSnapshot(q,(snapshot)=>{
-        box.innerHTML = ""; snapshot.forEach(doc=>{
-            const msg = doc.data();
-            if(currentRoom!== "groq-ai" && currentRoom!== "global" && msg.room!== currentRoom) return;
-            if(currentRoom === "global" && msg.room!== "global") return;
-            let content = msg.text;
-            if(msg.type==="image") content = `<img class="chat-img" src="${msg.text}"/>`;
-            if(msg.type==="audio") content = `<audio controls src="${msg.text}"></audio>`;
-            box.innerHTML += `<div class="message ${msg.uid===currentUser.uid?'me':'other'}">${msg.uid!==currentUser.uid? `<b style="font-size:12px;color:var(--accent2);">${msg.name}</b><br>` : ''}${content}</div>`;
-        });
-        box.scrollTop = box.scrollHeight;
-    });
-}
+function loadMessages(){const box=document.getElementById("messages");let q=query(collection(db,"messages"),orderBy("createdAt"));if(currentRoom==="groq-ai")q=query(collection(db,"groq-ai"),orderBy("createdAt"));unsubscribe=onSnapshot(q,(snapshot)=>{box.innerHTML="";snapshot.forEach(docSnap=>{const msg=docSnap.data();if(currentRoom!=="groq-ai"&&currentRoom!=="global"&&msg.room!==currentRoom)return;if(currentRoom==="global"&&msg.room!=="global")return;let content=msg.text;if(msg.type==="image")content=`<img class="chat-img" src="${msg.text}" onclick="window.open('${msg.text}')"/>`;if(msg.type==="audio")content=`<audio controls src="${msg.text}"></audio>`;let replyHtml=msg.replyTo?`<div style="font-size:12px;opacity:0.7;border-left:3px solid var(--accent);padding-left:8px;margin-bottom:5px;">Reply: ${msg.replyTo}</div>`:"";box.innerHTML+=`<div class="message ${msg.uid===currentUser.uid?'me':'other'}" data-id="${docSnap.id}" data-text="${msg.text}" oncontextmenu="showMsgActions(event,'${docSnap.id}','${msg.text}')">${msg.uid!==currentUser.uid?`<b style="font-size:12px;color:var(--accent2);">${msg.name}</b><br>`:""}${replyHtml}${content}</div>`;});box.scrollTop=box.scrollHeight;});}
 
-async function loadPrivateUsers(){
-    const usersBox = document.getElementById("privateChats");
-    onSnapshot(collection(db,"users"),async (snapshot)=>{
-        usersBox.innerHTML = "";
-        snapshot.forEach(docSnap=>{
-            if(docSnap.id!==currentUser.uid){
-                const data=docSnap.data(); const roomId=[currentUser.uid,docSnap.id].sort().join("_");
-                const div=document.createElement("div"); div.className="chat-item";
-                div.innerHTML=`<div class="avatar">${data.username[0]}<span class="online-dot" style="display:${data.online?'block':'none'}"></span></div><div><b>${data.username}</b></div>`;
-                div.onclick=()=>openChat(roomId,data.username); usersBox.appendChild(div);
-            }
-        });
-    });
-}
+async function loadPrivateUsers(){const usersBox=document.getElementById("privateChats");onSnapshot(collection(db,"users"),(snapshot)=>{usersBox.innerHTML="";snapshot.forEach(docSnap=>{if(docSnap.id!==currentUser.uid){const data=docSnap.data();const roomId=[currentUser.uid,docSnap.id].sort().join("_");const div=document.createElement("div");div.className="chat-item";div.innerHTML=`<div class="avatar">${data.username[0]}<span class="online-dot" style="display:${data.online?'block':'none'}"></span></div><div><b>${data.username}</b><br><small>${data.typing?"typing...":""}</small></div>`;div.onclick=()=>openChat(roomId,data.username);usersBox.appendChild(div);}});});}
 
-window.uploadFile = async function(e){ const file=e.target.files[0]; const storageRef=ref(storage,`uploads/${Date.now()}_${file.name}`); const snap=await uploadBytes(storageRef,file); const url=await getDownloadURL(snap.ref); await addDoc(collection(db,"messages"),{room:currentRoom,name:userProfile.username,uid:currentUser.uid,text:url,type:"image",createdAt:serverTimestamp()}); }
+document.getElementById("fileInput").addEventListener("change",async(e)=>{const file=e.target.files[0];const storageRef=ref(storage,`uploads/${Date.now()}_${file.name}`);const snap=await uploadBytes(storageRef,file);const url=await getDownloadURL(snap.ref);await addDoc(collection(db,"messages"),{room:currentRoom,name:userProfile.username,uid:currentUser.uid,text:url,type:"image",createdAt:serverTimestamp()});});
 
-window.startRecording = async function(){ const stream=await navigator.mediaDevices.getUserMedia({audio:true}); mediaRecorder=new MediaRecorder(stream); mediaRecorder.start(); mediaRecorder.ondataavailable=e=>audioChunks.push(e.data); }
-window.stopRecording = async function(){ mediaRecorder.stop(); mediaRecorder.onstop=async()=>{ const blob=new Blob(audioChunks,{type:"audio/mp3"}); const storageRef=ref(storage,`voice/${Date.now()}.mp3`); const snap=await uploadBytes(storageRef,blob); const url=await getDownloadURL(snap.ref); await addDoc(collection(db,"messages"),{room:currentRoom,name:userProfile.username,uid:currentUser.uid,text:url,type:"audio",createdAt:serverTimestamp()}); audioChunks=[]; } }
+let mediaRecorder,audioChunks=[];
+window.startVoiceRecord=async function(){const stream=await navigator.mediaDevices.getUserMedia({audio:true});mediaRecorder=new MediaRecorder(stream);mediaRecorder.start();audioChunks=[];mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);setTimeout(stopVoiceRecord,10000);alert("Recording... 10s max");}
+window.stopVoiceRecord=async function(){mediaRecorder.stop();mediaRecorder.onstop=async()=>{const blob=new Blob(audioChunks,{type:"audio/mp3"});const storageRef=ref(storage,`voice/${Date.now()}.mp3`);const snap=await uploadBytes(storageRef,blob);const url=await getDownloadURL(snap.ref);await addDoc(collection(db,"messages"),{room:currentRoom,name:userProfile.username,uid:currentUser.uid,text:url,type:"audio",createdAt:serverTimestamp()});audioChunks=[];}}
 
-function generateEmojis(){ const emojis=["😀","😂","❤️","🔥","👍","🙏","💯","😭","😍","🥰"]; const picker=document.getElementById("emojiPicker"); emojis.forEach(e=>{const span=document.createElement("span");span.className="emoji";span.innerText=e;span.onclick=()=>{document.getElementById("messageInput").value+=e;};picker.appendChild(span);});}
-window.toggleEmoji = ()=>{document.getElementById("emojiPicker").style.display=document.getElementById("emojiPicker").style.display==="block"?"none":"block"}
-window.searchChats = ()=>{ const filter=document.getElementById("searchInput").value.toLowerCase(); document.querySelectorAll(".chat-item").forEach(item=>{ item.style.display=item.innerText.toLowerCase().includes(filter)?"flex":"none"; }); }
+function generateEmojis(){window.emojiPicker=document.createElement("div");emojiPicker.className="modal";emojiPicker.innerHTML=`<div class="modal-content"><h3>Emojis</h3><div class="emoji-grid">${emojis.map(e=>`<div class="emoji" onclick="insertEmoji('${e}')">${e}</div>`).join("")}</div><button onclick="emojiPicker.style.display='none'">Close</button></div>`;document.body.appendChild(emojiPicker);}
+window.openEmojiPicker=()=>{emojiPicker.style.display="flex";}
+window.insertEmoji=(e)=>{document.getElementById("messageInput").value+=e;emojiPicker.style.display="none";}
+
+window.showMsgActions=(e,id,text)=>{e.preventDefault();selectedMessageId=id;selectedMessageData=text;const actions=document.getElementById("messageActions");actions.style.display="flex";actions.style.left=e.pageX+"px";actions.style.top=e.pageY+"px";}
+window.copyMessage=()=>{navigator.clipboard.writeText(selectedMessageData);document.getElementById("messageActions").style.display="none";}
+window.deleteMessage=async()=>{await deleteDoc(doc(db,"messages",selectedMessageId));document.getElementById("messageActions").style.display="none";}
+window.replyMessage=()=>{replyTo=selectedMessageData;document.getElementById("messageInput").placeholder="Replying: "+selectedMessageData.substring(0,20)+"...";document.getElementById("messageActions").style.display="none";}
+
+window.searchChats=()=>{const filter=document.getElementById("searchInput").value.toLowerCase();document.querySelectorAll(".chat-item").forEach(item=>{item.style.display=item.innerText.toLowerCase().includes(filter)?"flex":"none";});}
 </script>
 </body>
 </html>
